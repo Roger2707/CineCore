@@ -3,7 +3,6 @@ using CinemaService.DTOs;
 using CinemaService.Models;
 using CinemaService.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace CinemaService.Repositories
 {

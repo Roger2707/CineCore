@@ -33,10 +33,17 @@ builder.Services.AddScoped<IMovieService, MovieService.Services.MovieService>();
 
 #endregion 
 
+#region Grpc
+
+builder.Services.AddGrpc();
+
+#endregion
+
 var app = builder.Build();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<GrpcMovieService>();
 
 app.Run();
