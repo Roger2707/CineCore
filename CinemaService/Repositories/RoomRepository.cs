@@ -3,6 +3,7 @@ using CinemaService.DTOs;
 using CinemaService.Models;
 using CinemaService.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace CinemaService.Repositories
 {
@@ -27,15 +28,14 @@ namespace CinemaService.Repositories
 
         public async Task<List<RoomDTO>> GetAll(Guid cinemaId)
         {
-            string query = @"
-                        SELECT 
-                            r.Id, r.Name, c.Name as CinemaName, SELECT COUNT(1) FROM Seats WHERE RoomId = r.Id as TotalSeats
-                        FROM Rooms r 
-                        INNER JOIN Cinemas c ON r.CinemaId = c.Id
-                        WHERE c.Id = @CinemaId
-                        ";
-            var parameters = new { CinemaId = cinemaId }; 
-            var rooms = await _db.Database.SqlQueryRaw<RoomDTO>(query, parameters).ToListAsync();
+            var rooms = await _db.Database.SqlQuery<RoomDTO>($@"
+                                SELECT 
+                                    r.Id, r.Name, c.Name as Cinema, 
+                                    (SELECT COUNT(1) FROM Seats s WHERE s.RoomId = r.Id) as TotalSeats
+                                FROM Rooms r 
+                                INNER JOIN Cinemas c ON r.CinemaId = c.Id
+                                WHERE c.Id = {cinemaId}
+                            ").ToListAsync();
             return rooms;
         }
 

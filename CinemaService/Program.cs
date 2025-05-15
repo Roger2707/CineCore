@@ -1,6 +1,7 @@
 using CinemaService.Data;
 using CinemaService.Repositories;
 using CinemaService.Repositories.IRepositories;
+using CinemaService.Services;
 using CinemaService.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<CinemaDBContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICinemaService, CinemaService.Services.CinemaService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 
 #endregion 
 

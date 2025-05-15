@@ -45,7 +45,8 @@ namespace CinemaService.Services
                 var room = new Room
                 {
                     Name = roomCreateDTO.Name,
-                    CinemaId = roomCreateDTO.CinemaId
+                    CinemaId = roomCreateDTO.CinemaId,
+                    Seats = new List<Seat>(),
                 };
 
                 await _unitOfWork.SaveChangesAsync();
@@ -76,14 +77,51 @@ namespace CinemaService.Services
             }          
         }
 
-        public Task UpdateRoom(Guid id, RoomUpdateDTO room)
+        public async Task UpdateRoom(Guid id, RoomUpdateDTO roomUpdateDTO)
         {
-            throw new NotImplementedException();
+            var room = await _unitOfWork.Room.GetbyId(id);
+            if(room == null) throw new Exception("Room not found");
+
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                room.Name = roomUpdateDTO.Name ?? room.Name;
+                room.CinemaId = roomUpdateDTO.CinemaId != Guid.Empty ? roomUpdateDTO.CinemaId : room.CinemaId;
+
+                if (roomUpdateDTO.NumberOfRow != room.Seats.Count / 10)
+                {
+                    room.Seats.Clear();
+
+                    for (int i = 0; i < roomUpdateDTO.NumberOfRow; i++)
+                    {
+                        char rowLetter = (char)('A' + i);
+
+                        for (int col = 1; col <= 10; col++)
+                        {
+                            room.Seats.Add(new Seat
+                            {
+                                Row = rowLetter.ToString(),
+                                Number = col,
+                                RoomId = room.Id,
+                            });
+                        }
+                    }
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
 
-        public Task DeleteRoom(Guid id)
+        public async Task DeleteRoom(Guid id)
         {
-            throw new NotImplementedException();
+            await _unitOfWork.Room.Delete(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         #endregion
