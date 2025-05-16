@@ -90,14 +90,60 @@ namespace ScheduleService.Services
 
         #region Retrieve
 
-        public Task<List<ScreeningDTO>> GetAll()
+        public async Task<List<ScreeningDTO>> GetAll()
         {
-            throw new NotImplementedException();
+            var screenings = await _screeningRepository.GetAll();
+            return screenings.Select(s => new ScreeningDTO
+            {
+                Id = s.Id,
+                StartTime = s.StartTime,
+                MovieId = s.MovieId,
+                Title = _grpcMovieClientService.GetMovieById(s.MovieId).Title,
+                Description = _grpcMovieClientService.GetMovieById(s.MovieId).Description,
+                DurationMinutes = _grpcMovieClientService.GetMovieById(s.MovieId).DurationMinutes,
+                PosterUrl = _grpcMovieClientService.GetMovieById(s.MovieId).PosterUrl,
+                PublicId = _grpcMovieClientService.GetMovieById(s.MovieId).PublicId,
+                Genres = _grpcMovieClientService.GetMovieById(s.MovieId).Genres,
+
+                CinemaId = s.CinemaId,
+                CinemaName = _grpcCinemaClientService.GetCinemaById(s.CinemaId).Name,
+                CinemaAddress = _grpcCinemaClientService.GetCinemaById(s.CinemaId).Address,
+
+                RoomId = s.RoomId,
+                RoomName = _grpcRoomClientService.GetRoomById(s.RoomId).Name,
+                NumberOfSeats = _grpcRoomClientService.GetRoomById(s.RoomId).TotalSeats
+            }).ToList();
         }
 
-        public Task<ScreeningDTO> GetById(Guid id)
+        public async Task<ScreeningDTO> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            var screening = await _screeningRepository.GetById(id);
+
+            var movie = _grpcMovieClientService.GetMovieById(screening.MovieId);
+            var cinema = _grpcCinemaClientService.GetCinemaById(screening.CinemaId);
+            var room = _grpcRoomClientService.GetRoomById(screening.RoomId);
+
+            return new ScreeningDTO
+            {
+                Id = screening.Id,
+                StartTime = screening.StartTime,
+
+                MovieId = screening.MovieId,
+                Title = movie.Title,
+                Description = movie.Description,
+                DurationMinutes = movie.DurationMinutes,
+                PosterUrl = movie.PosterUrl,
+                PublicId = movie.PublicId,
+                Genres = movie.Genres,
+
+                CinemaId = screening.CinemaId,
+                CinemaName = cinema.Name,
+                CinemaAddress = cinema.Address,
+
+                RoomId = screening.RoomId,
+                RoomName = room.Name,
+                NumberOfSeats = room.TotalSeats
+            };
         }
 
         #endregion

@@ -17,15 +17,30 @@ namespace ScheduleService.Controllers
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _screeningService.GetAll();
-            return Ok(result);
+            try
+            {
+                var result = await _screeningService.GetAll();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }   
+
         }
 
         [HttpGet("get-by-id")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var result = await _screeningService.GetById(id);
-            return Ok(result);
+            try
+            {
+                var result = await _screeningService.GetById(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost("create")]

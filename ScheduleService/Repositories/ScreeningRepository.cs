@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using ScheduleService.Data;
 using ScheduleService.DTOs;
 using ScheduleService.Models;
@@ -31,14 +32,29 @@ namespace ScheduleService.Repositories
         #endregion
 
         #region Retrieve
-        public Task<List<ScreeningDTO>> GetAll()
+        public async Task<List<ScreeningDTO>> GetAll()
         {
-            throw new NotImplementedException();
+            string query = @"
+                            SELECT Id, StartTime, MovieId, CinemaId, RoomId 
+                            FROM Screenings
+                            ";
+            var screenings = await _db.Database.SqlQueryRaw<ScreeningDTO>(query).ToListAsync();
+            return screenings;
         }
 
-        public Task<ScreeningDTO> GetById(Guid id)
+        public async Task<ScreeningDTO> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            string query = @"
+                            SELECT Id, StartTime, MovieId, CinemaId, RoomId 
+                            FROM Screenings
+                            WHERE Id = @ScreeningId
+                            ";
+            var parameters = new SqlParameter[]
+            {
+                new SqlParameter("@ScreeningId", id)
+            };
+            var screening = await _db.Database.SqlQueryRaw<ScreeningDTO>(query, parameters).FirstOrDefaultAsync();
+            return screening;
         }
 
         public async Task<Screening> GetScreeing(Guid id)
