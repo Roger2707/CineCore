@@ -7,6 +7,11 @@ using MovieService.Services.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Switch http2 (Dev env)
+
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
+#endregion
 
 builder.Services.AddControllers();
 

@@ -23,8 +23,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
+	
     <ItemGroup>
-	    <Protobuf Include="protos/movie.proto" GrpcServices="Server" />
+      <Protobuf Include="protos\movie.proto" GrpcServices="Server" />
     </ItemGroup>
+
 </Project>
