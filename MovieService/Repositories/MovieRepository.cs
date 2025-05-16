@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MovieService.Data;
 using MovieService.DTOs;
 using MovieService.Models;
@@ -60,7 +61,7 @@ namespace MovieService.Repositories
         public async Task<MovieDTO> GetById(Guid id)
         {
             var movie = await _db.Movies
-                .FromSqlRaw(" SELECT * FROM Movies WHERE Id = @Id ", id)
+                .FromSqlRaw(" SELECT * FROM Movies WHERE Id = @Id ", new SqlParameter( "@Id", id))
                 .FirstOrDefaultAsync();
 
             var movieDTO =  new MovieDTO

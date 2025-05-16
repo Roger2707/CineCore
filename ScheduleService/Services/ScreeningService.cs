@@ -8,18 +8,20 @@ namespace ScheduleService.Services
     public class ScreeningService : IScreeningService
     {
         private readonly IScreeningRepository _screeningRepository;
+        private readonly GrpcMovieClientService _grpcMovieClientService;
 
-        public ScreeningService(IScreeningRepository screeningRepository)
+        public ScreeningService(IScreeningRepository screeningRepository, GrpcMovieClientService grpcMovieClientService)
         {
             _screeningRepository = screeningRepository;
+            _grpcMovieClientService = grpcMovieClientService;
         }
 
         #region Validations
 
         private bool IsMovieExisted(Guid movieId)
         {
-
-            return true;
+            var movie = _grpcMovieClientService.GetMovieById(movieId);
+            return movie != null;
         }
 
         private bool IsCinemaExisted(Guid cinemaId)
