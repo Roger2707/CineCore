@@ -7,6 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#region Switch http2 (Dev env)
+
+AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
+#endregion
 
 builder.Services.AddControllers();
 
@@ -33,10 +38,19 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 
 #endregion 
 
+#region Grpc
+
+builder.Services.AddGrpc();
+
+#endregion
+
 var app = builder.Build();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<GrpcCinemaService>();
+app.MapGrpcService<GrpcRoomService>();
 
 app.Run();

@@ -34,7 +34,7 @@ namespace ScheduleService.Services
             try
             {
                 var reply = client.GetMovie(request);
-                var auction = new MovieDTO
+                var movie = new MovieDTO
                 {
                     Id = Guid.Parse(reply.Movie.Id),
                     Title = reply.Movie.Title,
@@ -44,7 +44,7 @@ namespace ScheduleService.Services
                     PublicId = reply.Movie.PublicId,
                     Genres = reply.Movie.Genres?.ToList()
                 };
-                return auction;
+                return movie;
             }
             catch (Exception ex)
             {

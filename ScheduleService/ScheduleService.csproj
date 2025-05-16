@@ -29,5 +29,10 @@
 	<ItemGroup>
 		<Protobuf Include="protos/movie.proto" GrpcServices="Client" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<Protobuf Include="protos/cinema.proto" GrpcServices="Client" />
+	</ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="protos/room.proto" GrpcServices="Client" />
+	</ItemGroup>
 </Project>

@@ -31,6 +31,8 @@ builder.Services.AddScoped<IScreeningService, ScreeningService>();
 #region Grpc Clients
 
 builder.Services.AddScoped<GrpcMovieClientService>();
+builder.Services.AddScoped<GrpcCinemaClientService>();
+builder.Services.AddScoped<GrpcRoomClientService>();
 
 #endregion
 

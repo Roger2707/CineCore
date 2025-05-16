@@ -1,0 +1,21 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "CinemaService";
+
+service GrpcCinema {
+    rpc GetCinema (GetCinemaRequest) returns (GrpcCinemaResponse);
+}
+
+message GetCinemaRequest {
+    string id = 1;
+}
+
+message GrpcCinemaModel {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+}
+
+message GrpcCinemaResponse {
+    GrpcCinemaModel Cinema = 1;
+}

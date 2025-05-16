@@ -2,6 +2,7 @@
 using CinemaService.DTOs;
 using CinemaService.Models;
 using CinemaService.Repositories.IRepositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaService.Repositories
@@ -48,12 +49,15 @@ namespace CinemaService.Repositories
         {
             string query = @"
                         SELECT 
-                            r.Id, r.Name, c.Name as CinemaName, SELECT COUNT(1) FROM Seats WHERE RoomId = r.Id as TotalSeats
+                            r.Id, r.Name, c.Name as Cinema, (SELECT COUNT(1) FROM Seats WHERE RoomId = r.Id) as TotalSeats
                         FROM Rooms r 
                         INNER JOIN Cinemas c ON r.CinemaId = c.Id
                         WHERE r.Id = @RoomId
                         ";
-            var parameters = new { RoomId = id };
+            var parameters = new SqlParameter[]
+            {
+                new SqlParameter("@RoomId", id)
+            };
             var room = await _db.Database.SqlQueryRaw<RoomDTO>(query, parameters).FirstOrDefaultAsync();
             return room;
         }

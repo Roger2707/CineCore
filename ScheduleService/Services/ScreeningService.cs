@@ -9,11 +9,17 @@ namespace ScheduleService.Services
     {
         private readonly IScreeningRepository _screeningRepository;
         private readonly GrpcMovieClientService _grpcMovieClientService;
+        private readonly GrpcCinemaClientService _grpcCinemaClientService;
+        private readonly GrpcRoomClientService _grpcRoomClientService;
 
-        public ScreeningService(IScreeningRepository screeningRepository, GrpcMovieClientService grpcMovieClientService)
+        public ScreeningService(IScreeningRepository screeningRepository, GrpcMovieClientService grpcMovieClientService,
+                GrpcCinemaClientService grpcCinemaClientService, GrpcRoomClientService grpcRoomClientService
+            )
         {
             _screeningRepository = screeningRepository;
             _grpcMovieClientService = grpcMovieClientService;
+            _grpcCinemaClientService = grpcCinemaClientService;
+            _grpcRoomClientService = grpcRoomClientService;
         }
 
         #region Validations
@@ -26,12 +32,14 @@ namespace ScheduleService.Services
 
         private bool IsCinemaExisted(Guid cinemaId)
         {
-            return true;
+            var cinema = _grpcCinemaClientService.GetCinemaById(cinemaId);
+            return cinema != null;
         }
 
         private bool IsRoomExisted(Guid roomId)
         {
-            return true;
+            var room = _grpcRoomClientService.GetRoomById(roomId);
+            return room != null;
         }
 
         #endregion
