@@ -93,25 +93,33 @@ namespace ScheduleService.Services
         public async Task<List<ScreeningDTO>> GetAll()
         {
             var screenings = await _screeningRepository.GetAll();
-            return screenings.Select(s => new ScreeningDTO
+            return screenings.Select(s =>
             {
-                Id = s.Id,
-                StartTime = s.StartTime,
-                MovieId = s.MovieId,
-                Title = _grpcMovieClientService.GetMovieById(s.MovieId).Title,
-                Description = _grpcMovieClientService.GetMovieById(s.MovieId).Description,
-                DurationMinutes = _grpcMovieClientService.GetMovieById(s.MovieId).DurationMinutes,
-                PosterUrl = _grpcMovieClientService.GetMovieById(s.MovieId).PosterUrl,
-                PublicId = _grpcMovieClientService.GetMovieById(s.MovieId).PublicId,
-                Genres = _grpcMovieClientService.GetMovieById(s.MovieId).Genres,
+                var movie = _grpcMovieClientService.GetMovieById(s.MovieId);
+                var cinema = _grpcCinemaClientService.GetCinemaById(s.CinemaId);
+                var room = _grpcRoomClientService.GetRoomById(s.RoomId);
 
-                CinemaId = s.CinemaId,
-                CinemaName = _grpcCinemaClientService.GetCinemaById(s.CinemaId).Name,
-                CinemaAddress = _grpcCinemaClientService.GetCinemaById(s.CinemaId).Address,
+                var screening = new ScreeningDTO
+                {
+                    Id = s.Id,
+                    StartTime = s.StartTime,
+                    MovieId = s.MovieId,
+                    Title = movie.Title,
+                    Description = movie.Description,
+                    DurationMinutes = movie.DurationMinutes,
+                    PosterUrl = movie.PosterUrl,
+                    PublicId = movie.PublicId,
+                    Genres = movie.Genres,
 
-                RoomId = s.RoomId,
-                RoomName = _grpcRoomClientService.GetRoomById(s.RoomId).Name,
-                NumberOfSeats = _grpcRoomClientService.GetRoomById(s.RoomId).TotalSeats
+                    CinemaId = s.CinemaId,
+                    CinemaName = cinema.Name,
+                    CinemaAddress = cinema.Address,
+
+                    RoomId = s.RoomId,
+                    RoomName = room.Name,
+                    NumberOfSeats = room.TotalSeats
+                };
+                return screening;
             }).ToList();
         }
 

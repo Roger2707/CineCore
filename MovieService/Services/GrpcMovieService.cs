@@ -32,5 +32,25 @@ namespace MovieService.Services
             response.Movie.Genres.AddRange(movie.Genres);
             return response;
         }
+
+        public override async Task<GrpcMoviesResponse> GetAllMovies(GetAllMoviesRequest request, ServerCallContext context)
+        {
+            Console.WriteLine("---> Retrieve all movies - gRPC");
+            var movies = await _movieService.GetAll();
+            var moviesResponse = movies.Select(m => new GrpcMovieModel()
+            {
+                Id = m.Id.ToString(),
+                Title = m.Title,
+                Description = m.Description,
+                DurationMinutes = m.DurationMinutes,
+                PosterUrl = m.PosterUrl,
+                PublicId = m.PublicId,
+                Genres = { m.Genres }
+            }).ToList();
+
+            var response = new GrpcMoviesResponse();
+            response.Movies.AddRange(moviesResponse);
+            return response;
+        }
     }
 }

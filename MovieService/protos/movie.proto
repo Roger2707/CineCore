@@ -4,10 +4,15 @@ option csharp_namespace = "MovieService";
 
 service GrpcMovie {
     rpc GetMovie (GetMovieRequest) returns (GrpcMovieResponse);
+    rpc GetAllMovies (GetAllMoviesRequest) returns (GrpcMoviesResponse);
 }
 
 message GetMovieRequest {
     string id = 1;
+}
+
+message GetAllMoviesRequest {
+    
 }
 
 message GrpcMovieModel {
@@ -22,4 +27,8 @@ message GrpcMovieModel {
 
 message GrpcMovieResponse {
     GrpcMovieModel movie = 1;
+}
+
+message GrpcMoviesResponse {
+    repeated GrpcMovieModel movies = 1;
 }

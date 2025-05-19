@@ -38,8 +38,15 @@ namespace ScheduleService.Repositories
                             SELECT Id, StartTime, MovieId, CinemaId, RoomId 
                             FROM Screenings
                             ";
-            var screenings = await _db.Database.SqlQueryRaw<ScreeningDTO>(query).ToListAsync();
-            return screenings;
+            var screenings = await _db.Database.SqlQueryRaw<Screening>(query).ToListAsync();
+            return screenings.Select(s => new ScreeningDTO
+            {
+                Id = s.Id,
+                StartTime = s.StartTime,
+                MovieId = s.MovieId,
+                CinemaId = s.CinemaId,
+                RoomId = s.RoomId
+            }).ToList();
         }
 
         public async Task<ScreeningDTO> GetById(Guid id)
@@ -53,8 +60,15 @@ namespace ScheduleService.Repositories
             {
                 new SqlParameter("@ScreeningId", id)
             };
-            var screening = await _db.Database.SqlQueryRaw<ScreeningDTO>(query, parameters).FirstOrDefaultAsync();
-            return screening;
+            var screening = await _db.Database.SqlQueryRaw<Screening>(query, parameters).FirstOrDefaultAsync();
+            return new ScreeningDTO
+            {
+                Id = screening.Id,
+                StartTime = screening.StartTime,
+                MovieId = screening.MovieId,
+                CinemaId = screening.CinemaId,
+                RoomId = screening.RoomId
+            };
         }
 
         public async Task<Screening> GetScreeing(Guid id)

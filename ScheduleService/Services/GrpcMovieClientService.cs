@@ -52,5 +52,42 @@ namespace ScheduleService.Services
                 return null;
             }
         }
+
+        public List<MovieDTO> GetMovies()
+        {
+            var channel = GrpcChannel.ForAddress(_config["Grpc:GrpcMovie"], new GrpcChannelOptions
+            {
+                HttpHandler = new SocketsHttpHandler
+                {
+                    EnableMultipleHttp2Connections = true,
+                },
+
+                Credentials = ChannelCredentials.Insecure // use for http
+            });
+
+            var client = new GrpcMovie.GrpcMovieClient(channel);
+            var request = new GetAllMoviesRequest();
+
+            try
+            {
+                var reply = client.GetAllMovies(request);
+                var movies = reply.Movies.Select(m => new MovieDTO
+                {
+                    Id = Guid.Parse(m.Id),
+                    Title = m.Title,
+                    DurationMinutes = m.DurationMinutes,
+                    Description = m.Description,
+                    PosterUrl = m.PosterUrl,
+                    PublicId = m.PublicId,
+                    Genres = m.Genres?.ToList()
+                }).ToList();
+                return movies;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "=> Error when call Grpc service");
+                return null;
+            }
+        }
     }
 }
