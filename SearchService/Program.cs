@@ -1,5 +1,7 @@
+using MassTransit;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using SearchService.Consumers;
 using SearchService.Data;
 using SearchService.DB;
 using SearchService.Services;
@@ -25,6 +27,28 @@ builder.Services.AddSingleton<IMongoClient>(sp =>
 });
 
 builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
+
+#endregion
+
+#region Masstransit Consumer Settings
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumersFromNamespaceContaining<MovieCreatedConsumer>();
+    x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        // retry : if stop mongodb 
+        cfg.ReceiveEndpoint("search-auction-created", e =>
+        {
+            e.UseMessageRetry(r => r.Interval(5, 5));
+            e.ConfigureConsumer<MovieCreatedConsumer>(context);
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 #endregion
 

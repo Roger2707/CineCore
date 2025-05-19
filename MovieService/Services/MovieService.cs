@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Contracts;
+using MassTransit;
 using MovieService.DTOs;
 using MovieService.Models;
 using MovieService.Repositories.IRepositories;
@@ -10,10 +11,12 @@ namespace MovieService.Services
     {
         private readonly IMovieRepository _movieRepository;
         private readonly CloudinaryService _cloudinaryService;
-        public MovieService(IMovieRepository movieRepository, CloudinaryService cloudinaryService)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public MovieService(IMovieRepository movieRepository, CloudinaryService cloudinaryService, IPublishEndpoint publishEndpoint)
         {
             _movieRepository = movieRepository;
             _cloudinaryService = cloudinaryService;
+            _publishEndpoint = publishEndpoint;
         }
         public async Task<List<MovieDTO>> GetAll(object param = null)
         {
@@ -52,6 +55,18 @@ namespace MovieService.Services
             }
 
             await _movieRepository.Create(movie);
+
+            await _publishEndpoint.Publish(new MovieCreated
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                DurationMinutes = movie.DurationMinutes,
+                PosterUrl = movie.PosterUrl,
+                PublicId = movie.PublicId,
+                Genres = movie.Genres.Select(g => Enum.GetName(typeof(Genre), g)).ToList()
+            });
+
             await _movieRepository.SaveChangeAsync();
         }
 

@@ -60,7 +60,7 @@ namespace MovieService.Controllers
             }
         }
 
-        [HttpDelete("get-all")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

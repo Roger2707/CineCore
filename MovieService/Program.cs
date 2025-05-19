@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using MovieService.Data;
 using MovieService.Repositories;
@@ -27,6 +28,28 @@ builder.Services.AddDbContext<MovieDBContext>(options =>
 #endregion
 
 #region MassTransit
+
+builder.Services.AddMassTransit(x =>
+{
+    // ensure to add the outbox after savechange success
+    x.AddEntityFrameworkOutbox<MovieDBContext>(o =>
+    {
+        // if process sending message to rabbitMQ failed, retry every 10 seconds
+        o.QueryDelay = TimeSpan.FromSeconds(10);
+        o.UseSqlServer();
+
+        // when savechange success, no add to message queue immediately, add outbox first
+        o.UseBusOutbox();
+    });
+
+    //x.AddConsumersFromNamespaceContaining<AuctionCreatedFaultConsumer>();
+    //x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("movie", false));
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 #endregion
 

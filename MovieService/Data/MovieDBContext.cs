@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using MovieService.Models;
 
 namespace MovieService.Data
@@ -14,7 +15,10 @@ namespace MovieService.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed Movie Data
+            // outbox pattern
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
         }
     }
 }
