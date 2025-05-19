@@ -85,6 +85,7 @@ namespace ScheduleService.Services
         public async Task Delete(Guid id)
         {
             await _screeningRepository.Delete(id);
+            await _screeningRepository.SaveChangeAsync();
         }
         #endregion
 
