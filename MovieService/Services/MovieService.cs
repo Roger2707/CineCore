@@ -73,6 +73,10 @@ namespace MovieService.Services
         public async Task DeleteAsync(Guid id)
         {
             await _movieRepository.Delete(id);
+            await _publishEndpoint.Publish(new MovieDeleted
+            {
+                Id = id
+            });
             await _movieRepository.SaveChangeAsync();
         }
 
@@ -98,6 +102,17 @@ namespace MovieService.Services
                 movie.PosterUrl = uploadResult.SecureUrl.AbsoluteUri;
                 movie.PublicId = uploadResult.PublicId;
             }
+
+            await _publishEndpoint.Publish(new MovieUpdated
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                DurationMinutes = movie.DurationMinutes,
+                PosterUrl = movie.PosterUrl,
+                PublicId = movie.PublicId,
+                Genres = movie.Genres.Select(g => Enum.GetName(typeof(Genre), g)).ToList()
+            });
 
             await _movieRepository.SaveChangeAsync();
         }
