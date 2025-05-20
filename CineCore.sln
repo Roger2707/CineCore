@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Cont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService", "BookingService\BookingService.csproj", "{519E7F52-81C4-466E-8124-048614012CE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrchestrationSaga", "OrchestrationSaga\OrchestrationSaga.csproj", "{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{519E7F52-81C4-466E-8124-048614012CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{519E7F52-81C4-466E-8124-048614012CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{519E7F52-81C4-466E-8124-048614012CE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

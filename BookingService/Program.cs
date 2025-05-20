@@ -1,4 +1,8 @@
 using BookingService.Data;
+using BookingService.Repositories;
+using BookingService.Repositories.IRepositories;
+using BookingService.Services;
+using BookingService.Services.IServices;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +41,19 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(context);
     });
 });
+
+#endregion
+
+#region Services
+
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService.Services.BookingService>();
+
+#endregion
+
+#region Grpc Client
+
+builder.Services.AddScoped<GrpcScreeningClientService>();
 
 #endregion
 

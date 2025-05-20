@@ -28,6 +28,12 @@ builder.Services.AddScoped<IScreeningService, ScreeningService>();
 
 #endregion
 
+#region Grpc Server
+
+builder.Services.AddGrpc();
+
+#endregion
+
 #region Grpc Clients
 
 builder.Services.AddScoped<GrpcMovieClientService>();
@@ -41,5 +47,6 @@ var app = builder.Build();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapGrpcService<GrpcScreeningService>();
 
 app.Run();
