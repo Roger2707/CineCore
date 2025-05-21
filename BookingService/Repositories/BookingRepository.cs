@@ -3,12 +3,14 @@ using BookingService.DTOs;
 using BookingService.Models;
 using BookingService.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BookingService.Repositories
 {
     public class BookingRepository : IBookingRepository
     {
         private readonly BookingDbContext _db;
+        private IDbContextTransaction _transaction;
 
         public BookingRepository(BookingDbContext db)
         {
@@ -102,6 +104,21 @@ namespace BookingService.Repositories
                     }).ToList()
                 })
                 .ToList();
+        }
+
+        public async Task BeginTransactionAsync()
+        {
+            _transaction = await _db.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            await _transaction?.CommitAsync();
+        }
+
+        public async Task RollbackTransactionAsync()
+        {
+            await _transaction?.RollbackAsync();
         }
 
         public async Task SaveChangeAsync()

@@ -11,5 +11,9 @@ namespace BookingService.Repositories.IRepositories
         Task Create(List<BookingSeat> bookingSeats);
         Task Delete(Guid bookingId);
         Task SaveChangeAsync();
+
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
     }
 }

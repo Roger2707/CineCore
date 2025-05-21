@@ -25,11 +25,8 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
 
 #region Redis
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var configuration = "http://localhost:6379";
-    return ConnectionMultiplexer.Connect(configuration);
-});
+var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString");
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
 
 #endregion
 
@@ -40,9 +37,9 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumersFromNamespaceContaining<BookingCreatedFaultConsumer>();
     x.AddEntityFrameworkOutbox<BookingDbContext>(o =>
     {
-        o.QueryDelay = TimeSpan.FromSeconds(10);
         o.UseSqlServer();
         o.UseBusOutbox();
+        o.QueryDelay = TimeSpan.FromSeconds(10);
     });
 
     x.UsingRabbitMq((context, cfg) =>

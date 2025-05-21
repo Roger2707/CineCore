@@ -22,9 +22,16 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.ReceiveEndpoint("booking-state", e =>
+        {
+            e.ConfigureSaga<BookingState>(context);
+        });
         cfg.ConfigureEndpoints(context);
     });
 });
+
+builder.Logging.AddConsole()
+    .SetMinimumLevel(LogLevel.Debug);
 
 var host = builder.Build();
 host.Run();

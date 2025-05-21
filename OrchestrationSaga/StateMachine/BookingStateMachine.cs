@@ -10,6 +10,7 @@ namespace OrchestrationSaga.StateMachine
         public State Failed { get; }
 
         public Event<BookingCreated> BookingCreatedEvent { get; private set; }
+
         public Event<PaymentCompleted> PaymentCompletedEvent { get; private set; }
         public Event<PaymentFailed> PaymentFailedEvent { get; private set; }
 
@@ -17,7 +18,19 @@ namespace OrchestrationSaga.StateMachine
         {
             InstanceState(x => x.CurrentState);
 
-            Event(() => BookingCreatedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
+            // 
+            Event(() => BookingCreatedEvent, x =>
+            {
+                x.CorrelateById(ctx => ctx.Message.BookingId);
+                x.InsertOnInitial = true;
+                x.SetSagaFactory(ctx => new BookingState
+                {
+                    CorrelationId = ctx.Message.BookingId,
+                    BookingId = ctx.Message.BookingId,
+                    ScreeningId = ctx.Message.ScreeningId,
+                    SeatIds = ctx.Message.SeatIds
+                });
+            });
             Event(() => PaymentCompletedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
             Event(() => PaymentFailedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
 
@@ -30,11 +43,9 @@ namespace OrchestrationSaga.StateMachine
                 When(BookingCreatedEvent)
                     .Then(ctx =>
                     {
-                        Console.WriteLine($"[Saga] BookingCreated: {ctx.Message.BookingId}");
-
-                        ctx.Saga.BookingId = ctx.Message.BookingId;
-                        ctx.Saga.SeatIds = ctx.Message.SeatIds;
-                        ctx.Saga.ScreeningId = ctx.Message.ScreeningId;
+                        var serviceProvider = ctx.GetPayload<IServiceProvider>();
+                        var logger = serviceProvider.GetService<ILogger<BookingStateMachine>>();
+                        logger?.LogInformation("[Saga] BookingCreated: {BookingId}", ctx.Message.BookingId);
                     })
                     .Send(new Uri("queue:payment-requested"), ctx => new PaymentRequested(ctx.Message.BookingId))
                     .TransitionTo(Payment)
