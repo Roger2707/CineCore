@@ -4,6 +4,7 @@ using BookingService.Repositories.IRepositories;
 using BookingService.Services.IServices;
 using Contracts.BookingEvents;
 using MassTransit;
+using StackExchange.Redis;
 
 namespace BookingService.Services
 {
@@ -12,12 +13,15 @@ namespace BookingService.Services
         private readonly IBookingRepository _bookingRepository;
         private readonly GrpcScreeningClientService _grpcScreeningClientService;
         private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IDatabase _redis;
 
-        public BookingService(IBookingRepository bookingRepository, GrpcScreeningClientService grpcScreeningClientService, IPublishEndpoint publishEndpoint)
+        public BookingService(IBookingRepository bookingRepository, GrpcScreeningClientService grpcScreeningClientService
+            , IPublishEndpoint publishEndpoint, IConnectionMultiplexer redis)
         {
             _bookingRepository = bookingRepository;
             _grpcScreeningClientService = grpcScreeningClientService;
             _publishEndpoint = publishEndpoint;
+            _redis = redis.GetDatabase();
         }
 
         #region GET
@@ -53,24 +57,52 @@ namespace BookingService.Services
                 Created = DateTime.UtcNow,
                 BookingStatus = BookingStatus.PENDING
             };
+            await _bookingRepository.Create(booking);
+            await _bookingRepository.SaveChangeAsync();
 
-            var bookingSeats = new List<BookingSeat>();
-            request.Seats.ForEach(s =>
+            #region Race Condition
+
+            var tasks = request.Seats.Select(async s =>
             {
-                bookingSeats.Add(new BookingSeat
+                var key = $"seat:{s}:screen:{request.ScreeningId}";
+                var existingValue = await _redis.StringGetAsync(key);
+                if (existingValue != RedisValue.Null)
+                    throw new ArgumentException($"Seat {s} is not available");
+
+                var held = await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromSeconds(10), When.NotExists);
+                if (!held)
+                    throw new ArgumentException($"Seat {s} is not available");
+
+                return new BookingSeat
                 {
                     BookingId = booking.Id,
                     SeatId = s,
                     Price = 139000000,
                     Created = DateTime.UtcNow
-                });
+                };
             });
+            var bookingSeats = (await Task.WhenAll(tasks)).ToList();
 
-            await _bookingRepository.Create(booking);
+            #endregion
+
             await _bookingRepository.Create(bookingSeats);
+            await _bookingRepository.SaveChangeAsync();
 
-            await _publishEndpoint.Publish(new BookingCreated(booking.Id, request.UserId, booking.TotalPrice));
+            await _publishEndpoint.Publish(new BookingCreated(booking.Id, request.Seats, request.ScreeningId));
+        }
 
+        public async Task Delete(Guid bookingId, List<Guid> SeatIds, Guid ScreeningId)
+        {
+            // 1. Delete from db
+            await _bookingRepository.Delete(bookingId);
+
+            // 2. Delete from redis
+            var tasks = SeatIds.Select(async s =>
+            {
+                var key = $"seat:{s}:screen:{ScreeningId}";
+                await _redis.KeyDeleteAsync(key);
+            });
+            await Task.WhenAll(tasks);
             await _bookingRepository.SaveChangeAsync();
         }
 

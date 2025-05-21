@@ -7,5 +7,6 @@ namespace BookingService.Services.IServices
         Task<List<BookingDTO>> GetBookings();
         Task<BookingDTO> GetBooking(Guid bookingId);
         Task Create(BookingCreateRequestDTO request);
+        Task Delete(Guid bookingId, List<Guid> SeatIds, Guid ScreeningId);
     }
 }

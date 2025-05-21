@@ -27,8 +27,9 @@ namespace OrchestrationSaga.Data
         {
             entity.HasKey(e => e.CorrelationId);
             entity.Property(e => e.CurrentState).HasMaxLength(64);
-            entity.Property(e => e.SeatHoldSuccess); 
-            entity.Property(e => e.PaymentSuccess);
+            entity.Property(e => e.BookingId); 
+            entity.Property(e => e.SeatIds);
+            entity.Property(e => e.ScreeningId);
             entity.ToTable("BookingStates");
         }
     }

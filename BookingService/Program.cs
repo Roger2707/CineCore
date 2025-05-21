@@ -6,6 +6,7 @@ using BookingService.Services;
 using BookingService.Services.IServices;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,12 +23,21 @@ builder.Services.AddDbContext<BookingDbContext>(options =>
 
 #endregion
 
+#region Redis
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var configuration = "http://localhost:6379";
+    return ConnectionMultiplexer.Connect(configuration);
+});
+
+#endregion
+
 #region MassTransit
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumersFromNamespaceContaining<SeatHoldRequestedConsumer>();
-
+    x.AddConsumersFromNamespaceContaining<BookingCreatedFaultConsumer>();
     x.AddEntityFrameworkOutbox<BookingDbContext>(o =>
     {
         o.QueryDelay = TimeSpan.FromSeconds(10);
@@ -37,12 +47,11 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.ReceiveEndpoint("seat-hold-requested", e =>
+        cfg.ReceiveEndpoint("booking-failed", e =>
         {
             e.UseMessageRetry(r => r.Interval(5, 5));
-            e.ConfigureConsumer<SeatHoldRequestedConsumer>(context);
+            e.ConfigureConsumer<BookingCreatedFaultConsumer>(context);
         });
-
         cfg.ConfigureEndpoints(context);
     });
 });

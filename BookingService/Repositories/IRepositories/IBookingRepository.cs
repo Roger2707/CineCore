@@ -9,7 +9,7 @@ namespace BookingService.Repositories.IRepositories
         Task<BookingDTO> GetBooking(Guid bookingId);
         Task Create(Booking booking);
         Task Create(List<BookingSeat> bookingSeats);
-
+        Task Delete(Guid bookingId);
         Task SaveChangeAsync();
     }
 }

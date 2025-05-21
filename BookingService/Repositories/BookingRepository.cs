@@ -15,7 +15,7 @@ namespace BookingService.Repositories
             _db = db;
         }
 
-        #region Create
+        #region Create / Delete
 
         public async Task Create(Booking booking)
         {
@@ -25,6 +25,15 @@ namespace BookingService.Repositories
         public async Task Create(List<BookingSeat> bookingSeats)
         {
             await _db.AddRangeAsync(bookingSeats);
+        }
+
+        public async Task Delete(Guid bookingId)
+        {
+            var booking = await _db.Bookings.FindAsync(bookingId);
+            if (booking != null)
+            {
+                _db.Bookings.Remove(booking);
+            }
         }
 
         #endregion
