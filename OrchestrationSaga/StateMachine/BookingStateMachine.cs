@@ -9,10 +9,9 @@ namespace OrchestrationSaga.StateMachine
         public State Completed { get; }
         public State Failed { get; }
 
-        public Event<BookingCreated> BookingCreatedEvent { get; private set; }
-
-        public Event<PaymentCompleted> PaymentCompletedEvent { get; private set; }
-        public Event<PaymentFailed> PaymentFailedEvent { get; private set; }
+        public Event<BookingCreated> BookingCreatedEvent { get; }
+        public Event<PaymentCompleted> PaymentCompletedEvent { get; }
+        public Event<PaymentFailed> PaymentFailedEvent { get; }
 
         public BookingStateMachine()
         {
