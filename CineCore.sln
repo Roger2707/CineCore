@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService", "BookingSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrchestrationSaga", "OrchestrationSaga\OrchestrationSaga.csproj", "{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{CDBDF871-235C-4829-9F73-4AD6D365161E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDBDF871-235C-4829-9F73-4AD6D365161E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDBDF871-235C-4829-9F73-4AD6D365161E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDBDF871-235C-4829-9F73-4AD6D365161E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDBDF871-235C-4829-9F73-4AD6D365161E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
