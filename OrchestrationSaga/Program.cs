@@ -16,16 +16,9 @@ builder.Services.AddMassTransit(x =>
         .EntityFrameworkRepository(r =>
         {
             r.ConcurrencyMode = ConcurrencyMode.Pessimistic;
-
             r.AddDbContext<DbContext, OrchestratorDbContext>((provider, opt) =>
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
         });
-
-    x.AddEntityFrameworkOutbox<OrchestratorDbContext>(o =>
-    {
-        o.UseSqlServer();
-        o.UseBusOutbox();
-    });
 
     x.UsingRabbitMq((context, cfg) =>
     {

@@ -40,7 +40,7 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, cfg) =>
     {
         // retry : if stop mongodb 
-        cfg.ReceiveEndpoint("search-auction-created", e =>
+        cfg.ReceiveEndpoint("search-movie-created", e =>
         {
             e.UseMessageRetry(r => r.Interval(5, 5));
             e.ConfigureConsumer<MovieCreatedConsumer>(context);
