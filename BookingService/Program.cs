@@ -1,4 +1,3 @@
-using BookingService.Consumers;
 using BookingService.Data;
 using BookingService.Repositories;
 using BookingService.Repositories.IRepositories;
@@ -34,21 +33,15 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumersFromNamespaceContaining<BookingCreatedFaultConsumer>();
     x.AddEntityFrameworkOutbox<BookingDbContext>(o =>
     {
+        o.QueryDelay = TimeSpan.FromSeconds(10);
         o.UseSqlServer();
         o.UseBusOutbox();
-        o.QueryDelay = TimeSpan.FromSeconds(10);
     });
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.ReceiveEndpoint("booking-failed", e =>
-        {
-            e.UseMessageRetry(r => r.Interval(5, 5));
-            e.ConfigureConsumer<BookingCreatedFaultConsumer>(context);
-        });
         cfg.ConfigureEndpoints(context);
     });
 });

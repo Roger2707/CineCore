@@ -40,25 +40,16 @@ namespace OrchestrationSaga.StateMachine
         {
             Initially(
                 When(BookingCreatedEvent)
-                    .Then(ctx =>
-                    {
-                        var serviceProvider = ctx.GetPayload<IServiceProvider>();
-                        var logger = serviceProvider.GetService<ILogger<BookingStateMachine>>();
-                        logger?.LogInformation("[Saga] BookingCreated: {BookingId}", ctx.Message.BookingId);
-                    })
+                    .Then(ctx => Console.WriteLine("[Saga] BookingCreated: {BookingId}", ctx.Message.BookingId))
                     .Send(new Uri("queue:payment-requested"), ctx => new PaymentRequested(ctx.Message.BookingId))
                     .TransitionTo(Payment)
                     .Catch<Exception>(ex => ex
-                        .Then(async ctx =>
-                        {
-                            Console.WriteLine($"[Saga] Failed in BookingCreated: {ctx.Exception.Message}");
-                            await ctx.Send(new Uri("queue:booking-failed")
-                                            , new BookingFailed(ctx.Message.BookingId, ctx.Saga.SeatIds, ctx.Saga.ScreeningId)
-                                        );
-                        })
+                        .Then(ctx => Console.WriteLine("[Saga] FAILED for BookingCreated: {BookingId}", ctx.Message.BookingId))
+                        .Send(new Uri("queue:booking-failed")
+                                , ctx => new BookingFailed(ctx.Message.BookingId, ctx.Saga.SeatIds, ctx.Saga.ScreeningId))                          
                         .TransitionTo(Failed)
                         .Finalize()
-                    )
+                    )         
             );
 
             During(Payment,
@@ -72,7 +63,6 @@ namespace OrchestrationSaga.StateMachine
                     .TransitionTo(Failed)
                     .Finalize()
             );
-
             SetCompletedWhenFinalized();
         }
     }

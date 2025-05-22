@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.BookingEvents;
 using MassTransit;
 using MovieService.DTOs;
 using MovieService.Models;
@@ -66,7 +67,6 @@ namespace MovieService.Services
                 PublicId = movie.PublicId,
                 Genres = movie.Genres.Select(g => Enum.GetName(typeof(Genre), g)).ToList()
             });
-
             await _movieRepository.SaveChangeAsync();
         }
 

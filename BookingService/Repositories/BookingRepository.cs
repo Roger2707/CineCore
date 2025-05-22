@@ -2,6 +2,7 @@
 using BookingService.DTOs;
 using BookingService.Models;
 using BookingService.Repositories.IRepositories;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -10,11 +11,13 @@ namespace BookingService.Repositories
     public class BookingRepository : IBookingRepository
     {
         private readonly BookingDbContext _db;
+        private readonly IPublishEndpoint _publishEndpoint;
         private IDbContextTransaction _transaction;
 
-        public BookingRepository(BookingDbContext db)
+        public BookingRepository(BookingDbContext db, IPublishEndpoint publishEndpoint)
         {
             _db = db;
+            _publishEndpoint = publishEndpoint;
         }
 
         #region Create / Delete
@@ -106,6 +109,9 @@ namespace BookingService.Repositories
                 .ToList();
         }
 
+        #endregion
+
+        #region Transactions
         public async Task BeginTransactionAsync()
         {
             _transaction = await _db.Database.BeginTransactionAsync();
@@ -124,6 +130,11 @@ namespace BookingService.Repositories
         public async Task SaveChangeAsync()
         {
             await _db.SaveChangesAsync();
+        }
+
+        public async Task PublishMessageAsync<T>(T message) where T : class
+        {
+            await _publishEndpoint.Publish(message);
         }
 
         #endregion

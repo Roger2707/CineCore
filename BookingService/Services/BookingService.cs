@@ -3,7 +3,6 @@ using BookingService.Models;
 using BookingService.Repositories.IRepositories;
 using BookingService.Services.IServices;
 using Contracts.BookingEvents;
-using MassTransit;
 using StackExchange.Redis;
 
 namespace BookingService.Services
@@ -12,16 +11,14 @@ namespace BookingService.Services
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly GrpcScreeningClientService _grpcScreeningClientService;
-        private readonly IPublishEndpoint _publishEndpoint;
         private readonly IDatabase _redis;
         private readonly ILogger<BookingService> _logger;
 
         public BookingService(IBookingRepository bookingRepository, GrpcScreeningClientService grpcScreeningClientService
-            , IPublishEndpoint publishEndpoint, IConnectionMultiplexer redis, ILogger<BookingService> logger)
+            , IConnectionMultiplexer redis, ILogger<BookingService> logger)
         {
             _bookingRepository = bookingRepository;
             _grpcScreeningClientService = grpcScreeningClientService;
-            _publishEndpoint = publishEndpoint;
             _redis = redis.GetDatabase();
             _logger = logger;
         }
@@ -55,7 +52,7 @@ namespace BookingService.Services
             try
             {
                 var booking = new Booking
-                {
+                { 
                     UserId = request.UserId,
                     ScreeningId = request.ScreeningId,
                     TotalPrice = request.Seats.Count * 139000000,
@@ -91,10 +88,15 @@ namespace BookingService.Services
                 #endregion
 
                 await _bookingRepository.Create(bookingSeats);
+                await _bookingRepository.PublishMessageAsync(new BookingCreated
+                {
+                    BookingId = booking.Id,
+                    SeatIds = request.Seats,
+                    ScreeningId = request.ScreeningId
+                });
                 await _bookingRepository.SaveChangeAsync();
-                await _bookingRepository.CommitTransactionAsync();
-                await _publishEndpoint.Publish(new BookingCreated(booking.Id, request.Seats, request.ScreeningId));
                 _logger.LogInformation("Published BookingCreated event for {BookingId}", booking.Id);
+                await _bookingRepository.CommitTransactionAsync();
             }
             catch (ArgumentException)
             {

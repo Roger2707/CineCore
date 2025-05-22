@@ -15,5 +15,6 @@ namespace BookingService.Repositories.IRepositories
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
+        Task PublishMessageAsync<T>(T message) where T : class;
     }
 }

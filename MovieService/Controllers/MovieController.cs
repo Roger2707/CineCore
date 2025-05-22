@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Contracts.BookingEvents;
+using MassTransit;
+using Microsoft.AspNetCore.Mvc;
 using MovieService.DTOs;
 using MovieService.Services.IService;
 

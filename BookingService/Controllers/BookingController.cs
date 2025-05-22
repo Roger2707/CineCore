@@ -20,7 +20,6 @@ namespace BookingService.Controllers
         {
             try
             {
-                // userId : 11111111-1111-1111-1111-111111111111 (hard code for testing)
                 await _bookingService.Create(request);
                 return Ok(new { message = "Booking created successfully" });
             }
