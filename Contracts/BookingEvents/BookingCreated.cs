@@ -9,7 +9,10 @@ namespace Contracts.BookingEvents
         public Guid ScreeningId { get; set; }
         public Guid CorrelationId => BookingId;
     }
-
-
     public record BookingFailed(Guid BookingId, List<Guid> SeatIds, Guid ScreeningId);
+    public record BookingFinished(Guid BookingId, BookingStatus BookingStatus);
+    public enum BookingStatus
+    {
+        PENDING, SUCCESSED, CANCELLED, EXPIRED
+    }
 }

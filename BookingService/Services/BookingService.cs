@@ -51,6 +51,24 @@ namespace BookingService.Services
             await _bookingRepository.BeginTransactionAsync();
             try
             {
+                #region Race Condition
+
+                foreach (var seat in request.Seats)
+                {
+                    var key = $"seat:{seat}:screen:{request.ScreeningId}";
+                    var existingValue = await _redis.StringGetAsync(key);
+                    if (existingValue != RedisValue.Null && existingValue != request.UserId.ToString())
+                        throw new ArgumentException($"Seat {seat} is not available");
+
+                    var held = await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromSeconds(10), When.NotExists);
+                    if (!held)
+                        throw new ArgumentException($"Seat {seat} is not held successfully ! someone is held");
+                }
+
+                #endregion
+
+                #region Create 
+
                 var booking = new Booking
                 { 
                     UserId = request.UserId,
@@ -62,19 +80,8 @@ namespace BookingService.Services
                 await _bookingRepository.Create(booking);
                 await _bookingRepository.SaveChangeAsync();
 
-                #region Race Condition
-
-                var tasks = request.Seats.Select(async s =>
+                var bookingSeats = request.Seats.Select(s =>
                 {
-                    var key = $"seat:{s}:screen:{request.ScreeningId}";
-                    var existingValue = await _redis.StringGetAsync(key);
-                    if (existingValue != RedisValue.Null)
-                        throw new ArgumentException($"Seat {s} is not available");
-
-                    var held = await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromSeconds(10), When.NotExists);
-                    if (!held)
-                        throw new ArgumentException($"Seat {s} is not available");
-
                     return new BookingSeat
                     {
                         BookingId = booking.Id,
@@ -82,20 +89,21 @@ namespace BookingService.Services
                         Price = 139000000,
                         Created = DateTime.UtcNow
                     };
-                });
-                var bookingSeats = (await Task.WhenAll(tasks)).ToList();
+                }).ToList();
+
+                await _bookingRepository.Create(bookingSeats);
 
                 #endregion
 
-                await _bookingRepository.Create(bookingSeats);
                 await _bookingRepository.PublishMessageAsync(new BookingCreated
                 {
                     BookingId = booking.Id,
                     SeatIds = request.Seats,
                     ScreeningId = request.ScreeningId
                 });
-                await _bookingRepository.SaveChangeAsync();
                 _logger.LogInformation("Published BookingCreated event for {BookingId}", booking.Id);
+
+                await _bookingRepository.SaveChangeAsync();
                 await _bookingRepository.CommitTransactionAsync();
             }
             catch (ArgumentException)

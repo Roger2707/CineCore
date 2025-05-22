@@ -40,11 +40,11 @@ namespace OrchestrationSaga.StateMachine
         {
             Initially(
                 When(BookingCreatedEvent)
-                    .Then(ctx => Console.WriteLine("[Saga] BookingCreated: {BookingId}", ctx.Message.BookingId))
+                    .Then(ctx => Console.WriteLine($"[Saga] BookingCreated: {ctx.Message.BookingId}"))
                     .Send(new Uri("queue:payment-requested"), ctx => new PaymentRequested(ctx.Message.BookingId))
                     .TransitionTo(Payment)
                     .Catch<Exception>(ex => ex
-                        .Then(ctx => Console.WriteLine("[Saga] FAILED for BookingCreated: {BookingId}", ctx.Message.BookingId))
+                        .Then(ctx => Console.WriteLine($"[Saga] FAILED for BookingCreated: {ctx.Message.BookingId}"))
                         .Send(new Uri("queue:booking-failed")
                                 , ctx => new BookingFailed(ctx.Message.BookingId, ctx.Saga.SeatIds, ctx.Saga.ScreeningId))                          
                         .TransitionTo(Failed)
