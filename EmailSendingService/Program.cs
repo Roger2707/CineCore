@@ -3,7 +3,8 @@ using EmailSendingService.Services;
 using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+
+builder.Services.AddScoped<EmailService>();
 
 #region Mass Transit Configuration
 
@@ -22,9 +23,7 @@ builder.Services.AddMassTransit(x =>
 
 #endregion
 
-
-builder.Services.AddScoped<EmailService>();
-
+var app = builder.Build();
 app.MapGet("/", () => "Hello World!");
 
 app.Run();
