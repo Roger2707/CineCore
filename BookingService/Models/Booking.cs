@@ -1,4 +1,6 @@
-﻿namespace BookingService.Models
+﻿using Contracts.BookingEvents;
+
+namespace BookingService.Models
 {
     public class Booking
     {

@@ -1,5 +1,5 @@
 using MassTransit;
-using PaymentService.Consumers;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,17 +9,18 @@ builder.Services.AddControllers();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumersFromNamespaceContaining<PaymentRequestedConsumer>();
-    
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.ReceiveEndpoint("payment-requested", e =>
-        {
-            e.ConfigureConsumer<PaymentRequestedConsumer>(context);
-        });
         cfg.ConfigureEndpoints(context);
     });
 });
+
+#endregion
+
+#region Redis
+
+var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString");
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
 
 #endregion
 

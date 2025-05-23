@@ -48,6 +48,7 @@ namespace BookingService.Services
             if(request.Seats.Count == 0)
                 throw new ArgumentException("Please choose seats !");
 
+            var bookingCreatedId = Guid.NewGuid();
             await _bookingRepository.BeginTransactionAsync();
             try
             {
@@ -60,7 +61,7 @@ namespace BookingService.Services
                     if (existingValue != RedisValue.Null && existingValue != request.UserId.ToString())
                         throw new ArgumentException($"Seat {seat} is not available");
 
-                    var held = await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromSeconds(10), When.NotExists);
+                    var held = await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromSeconds(100), When.NotExists);
                     if (!held)
                         throw new ArgumentException($"Seat {seat} is not held successfully ! someone is held");
                 }
@@ -80,6 +81,7 @@ namespace BookingService.Services
                 await _bookingRepository.Create(booking);
                 await _bookingRepository.SaveChangeAsync();
 
+                bookingCreatedId = booking.Id;
                 var bookingSeats = request.Seats.Select(s =>
                 {
                     return new BookingSeat
@@ -109,12 +111,14 @@ namespace BookingService.Services
             catch (ArgumentException)
             {
                 await _bookingRepository.RollbackTransactionAsync();
+                await _bookingRepository.PublishMessageAsync(new BookingFailed(bookingCreatedId));
                 throw;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to publish BookingCreated event");
                 await _bookingRepository.RollbackTransactionAsync();
+                await _bookingRepository.PublishMessageAsync(new BookingFailed(bookingCreatedId));
                 throw new Exception("Error when creating booking", ex);
             }
         }

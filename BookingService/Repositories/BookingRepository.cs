@@ -2,6 +2,7 @@
 using BookingService.DTOs;
 using BookingService.Models;
 using BookingService.Repositories.IRepositories;
+using Contracts.BookingEvents;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;

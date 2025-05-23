@@ -5,13 +5,13 @@ namespace OrchestrationSaga.StateMachine
 {
     public class BookingStateMachine : MassTransitStateMachine<BookingState>
     {
-        public State Payment { get; }
+        public State TicketSending { get; set; }
         public State Completed { get; }
         public State Failed { get; }
 
         public Event<BookingCreated> BookingCreatedEvent { get; }
-        public Event<PaymentCompleted> PaymentCompletedEvent { get; }
-        public Event<PaymentFailed> PaymentFailedEvent { get; }
+        public Event<BookingFailed> BookingFailedEvent { get; }
+        public Event<TicketDelivered> TicketDeliveredEvent { get; private set; }
 
         public BookingStateMachine()
         {
@@ -30,39 +30,35 @@ namespace OrchestrationSaga.StateMachine
                     SeatIds = ctx.Message.SeatIds
                 });
             });
-            Event(() => PaymentCompletedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
-            Event(() => PaymentFailedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
+            Event(() => BookingFailedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
+            Event(() => TicketDeliveredEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
 
-            ConfigureStateMachine();    
+            ConfigureStateMachine();
         }
 
         private void ConfigureStateMachine()
         {
             Initially(
                 When(BookingCreatedEvent)
-                    .Then(ctx => Console.WriteLine($"[Saga] BookingCreated: {ctx.Message.BookingId}"))
-                    .Send(new Uri("queue:payment-requested"), ctx => new PaymentRequested(ctx.Message.BookingId))
-                    .TransitionTo(Payment)
-                    .Catch<Exception>(ex => ex
-                        .Then(ctx => Console.WriteLine($"[Saga] FAILED for BookingCreated: {ctx.Message.BookingId}"))
-                        .Send(new Uri("queue:booking-failed")
-                                , ctx => new BookingFailed(ctx.Message.BookingId, ctx.Saga.SeatIds, ctx.Saga.ScreeningId))                          
-                        .TransitionTo(Failed)
-                        .Finalize()
-                    )         
+                    .Then(ctx => Console.WriteLine($"[Saga] Created Booking Success, BookingId: {ctx.Message.BookingId}"))
+                    .Send(new Uri("queue:sending-email-ticket"), ctx => new EmailTicketCreated(ctx.Message.BookingId, "abc@gmail.com"))
+                    .TransitionTo(TicketSending)
             );
 
-            During(Payment,
-                When(PaymentCompletedEvent)
-                    .Then(ctx => Console.WriteLine($"[Saga] Payment success for booking: {ctx.Message.BookingId}"))
+            During(TicketSending,
+                When(TicketDeliveredEvent)
+                    .Then(ctx => Console.WriteLine($"[Saga] Ticket delivered successfully for BookingId: {ctx.Message.BookingId}"))
                     .TransitionTo(Completed)
-                    .Finalize(),
+                    .Finalize()
+            );
 
-                When(PaymentFailedEvent)
-                    .Then(ctx => Console.WriteLine("[Saga] Payment Failed"))
+            DuringAny(
+                When(BookingFailedEvent)
+                    .Then(ctx => Console.WriteLine($"[Saga] Booking failed, bookingId: {ctx.Message.BookingId}"))
                     .TransitionTo(Failed)
                     .Finalize()
             );
+
             SetCompletedWhenFinalized();
         }
     }

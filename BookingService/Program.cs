@@ -1,3 +1,4 @@
+using BookingService.Consumers;
 using BookingService.Data;
 using BookingService.Repositories;
 using BookingService.Repositories.IRepositories;
@@ -33,6 +34,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumersFromNamespaceContaining<BookingCreateCommandConsumer>(); 
     x.AddEntityFrameworkOutbox<BookingDbContext>(o =>
     {
         o.QueryDelay = TimeSpan.FromSeconds(10);
@@ -42,6 +44,10 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.ReceiveEndpoint("booking-create-command", e =>
+        {
+            e.ConfigureConsumer<BookingCreateCommandConsumer>(context);
+        });
         cfg.ConfigureEndpoints(context);
     });
 });
