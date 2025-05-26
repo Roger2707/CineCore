@@ -1,4 +1,6 @@
-﻿namespace CinemaService.Models
+﻿using Contracts.BookingEvents;
+
+namespace CinemaService.Models
 {
     public class ScreeningSeat
     {

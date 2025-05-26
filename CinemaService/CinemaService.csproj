@@ -27,9 +27,18 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+  </ItemGroup>
+
 	<ItemGroup>
-		<Protobuf Include="protos/cinema.proto" GrpcServices="Server" />	
+		<Protobuf Include="protos/cinema.proto" GrpcServices="Server" />
 	</ItemGroup>
+	
+	<ItemGroup>
+		<Protobuf Include="protos/screening.proto" GrpcServices="Server" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<Protobuf Include="protos/movie.proto" GrpcServices="Client" />
 	</ItemGroup>

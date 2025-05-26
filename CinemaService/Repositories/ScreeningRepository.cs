@@ -1,6 +1,7 @@
 ﻿using CinemaService.Data;
 using CinemaService.Models;
 using CinemaService.Repositories.IRepositories;
+using Contracts.BookingEvents;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaService.Repositories
@@ -40,6 +41,21 @@ namespace CinemaService.Repositories
                 .Include(s => s.Cinema)
                 .Include(s => s.Theater)
                 .FirstOrDefaultAsync(s => s.Id == id);
+        }
+
+        public async Task UpdateScreeningSeatStatus(UpdateSeatStatus updateSeatStatus)
+        {
+            foreach(var seat in updateSeatStatus.Seats)
+            {
+                await _db.ScreeningSeats.AddAsync(new ScreeningSeat
+                {
+                    SeatId = seat,
+                    ScreeningId = updateSeatStatus.ScreeningId,
+                    SeatStatus = updateSeatStatus.SeatStatus,
+                    ReservedAt = DateTime.UtcNow,
+                    ReservedBy = updateSeatStatus.UserId
+                });
+            }
         }
     }
 }

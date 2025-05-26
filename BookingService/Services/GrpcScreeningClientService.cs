@@ -1,7 +1,7 @@
 ﻿using BookingService.DTOs;
+using CinemaService;
 using Grpc.Core;
 using Grpc.Net.Client;
-using ScheduleService;
 
 namespace BookingService.Services
 {
@@ -14,6 +14,7 @@ namespace BookingService.Services
             _logger = logger;
             _config = config;
         }
+
         public ScreeningDTOResponse GetScreening(Guid id)
         {
             var channel = GrpcChannel.ForAddress(_config["Grpc:GrpcScreening"], new GrpcChannelOptions

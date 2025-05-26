@@ -1,4 +1,5 @@
 using MassTransit;
+using PaymentService.Consumers;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +10,14 @@ builder.Services.AddControllers();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumersFromNamespaceContaining<PaymentRefundConsumer>();
+
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.ReceiveEndpoint("refund-payment", e =>
+        {
+            e.ConfigureConsumer<PaymentRefundConsumer>(context);
+        });
         cfg.ConfigureEndpoints(context);
     });
 });

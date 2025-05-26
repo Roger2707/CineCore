@@ -1,0 +1,19 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "CinemaService";
+
+service GrpcScreening {
+    rpc GetScreening (GetScreeningRequest) returns (GrpcScreeningResponse);
+}
+
+message GetScreeningRequest {
+    string id = 1;
+}
+
+message GrpcScreeningModel {
+    string id = 1;
+}
+
+message GrpcScreeningResponse {
+    GrpcScreeningModel Screening = 1;
+}

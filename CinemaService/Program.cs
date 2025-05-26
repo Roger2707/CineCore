@@ -1,8 +1,10 @@
+using CinemaService.Consumers;
 using CinemaService.Data;
 using CinemaService.Repositories;
 using CinemaService.Repositories.IRepositories;
 using CinemaService.Services;
 using CinemaService.Services.IServices;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,30 @@ builder.Services.AddDbContext<CinemaDBContext>(options =>
 #endregion
 
 #region MassTransit
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumersFromNamespaceContaining<UpdateSeatStatusConsumer>();
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.ReceiveEndpoint("update-seat-status", e =>
+        {
+            e.UseMessageRetry(r =>
+            {
+                r.Exponential(
+                    retryLimit: 5,
+                    minInterval: TimeSpan.FromSeconds(10),
+                    maxInterval: TimeSpan.FromMinutes(1),
+                    intervalDelta: TimeSpan.FromSeconds(5)
+                );
+            });
+
+            e.ConfigureConsumer<UpdateSeatStatusConsumer>(context);
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 #endregion
 

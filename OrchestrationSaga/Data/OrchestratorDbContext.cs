@@ -30,6 +30,8 @@ namespace OrchestrationSaga.Data
             entity.Property(e => e.BookingId); 
             entity.Property(e => e.SeatIds);
             entity.Property(e => e.ScreeningId);
+            entity.Property(e => e.UserId);
+            entity.Property(e => e.PaymentIntentId).HasMaxLength(128);
             entity.ToTable("BookingStates");
         }
     }

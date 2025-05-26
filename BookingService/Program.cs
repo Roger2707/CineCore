@@ -45,8 +45,23 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.ReceiveEndpoint("booking-create-command", e =>
-        {
+        {          
+            e.UseMessageRetry(r =>
+            {
+                r.Exponential(
+                    retryLimit: 5,
+                    minInterval: TimeSpan.FromSeconds(10),
+                    maxInterval: TimeSpan.FromMinutes(1),
+                    intervalDelta: TimeSpan.FromSeconds(5)
+                );
+            });
+
             e.ConfigureConsumer<BookingCreateCommandConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("release-seats-hold", e =>
+        {
+            e.ConfigureConsumer<ReleaseSeatHoldConsumer>(context);
         });
         cfg.ConfigureEndpoints(context);
     });

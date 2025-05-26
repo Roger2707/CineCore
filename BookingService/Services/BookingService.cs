@@ -43,12 +43,12 @@ namespace BookingService.Services
         public async Task Create(BookingCreateRequestDTO request)
         {
             if(IsShowExisted(request.ScreeningId) == false)
-                throw new ArgumentException("Show Not Found");
+                throw new ArgumentException("Screening Is Not Found");
 
             if(request.Seats.Count == 0)
                 throw new ArgumentException("Please choose seats !");
 
-            var bookingId = Guid.NewGuid();
+            var bookingId = request.BookingId;
             await _bookingRepository.BeginTransactionAsync();
             try
             {
@@ -94,11 +94,8 @@ namespace BookingService.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to publish BookingCreated event");
                 _logger.LogError(ex, "Failed to create booking: {BookingId}", bookingId);
-
                 await _bookingRepository.RollbackTransactionAsync();
-                await _bookingRepository.PublishMessageAsync(new BookingFailed(bookingId));
                 throw;
             }
         }
@@ -125,8 +122,7 @@ namespace BookingService.Services
         private bool IsShowExisted(Guid screeningId)
         {
             var screening = _grpcScreeningClientService.GetScreening(screeningId);
-            if (screening == null) throw new ArgumentException("Show Not Found");
-            return true;
+            return screening != null;
         }
 
         #endregion

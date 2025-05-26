@@ -2,6 +2,7 @@
 using CinemaService.Models;
 using CinemaService.Repositories.IRepositories;
 using CinemaService.Services.IServices;
+using Contracts.BookingEvents;
 
 namespace CinemaService.Services
 {
@@ -57,6 +58,19 @@ namespace CinemaService.Services
             existedScreening.Duration = (int)(existedScreening.EndTime - existedScreening.StartTime).TotalMinutes;
 
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task UpdateScreeningSeatStatus(UpdateSeatStatus updateSeatStatus)
+        {
+            try
+            {
+                await _unitOfWork.Screening.UpdateScreeningSeatStatus(updateSeatStatus);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         #region Retrived

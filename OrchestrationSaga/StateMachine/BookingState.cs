@@ -9,5 +9,7 @@ namespace OrchestrationSaga.StateMachine
         public Guid BookingId { get; set; }
         public List<Guid> SeatIds { get; set; }
         public Guid ScreeningId { get; set; }
+        public Guid UserId { get; set; }
+        public string PaymentIntentId { get; set; }
     }
 }

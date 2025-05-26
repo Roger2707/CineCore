@@ -23,6 +23,7 @@ namespace PaymentService.Services
         public async Task<PaymentIntent> CreatePaymentIntentAsync(PaymentRequestDTO request)
         {
             #region Validate and Extend Seat Hold
+
             foreach (var seat in request.Seats)
             {
                 var key = $"seat:{seat}:screen:{request.ScreeningId}";
@@ -35,15 +36,19 @@ namespace PaymentService.Services
                 // Extend TTL for payment processing (10 minutes)
                 await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromMinutes(10));
             }
+
             #endregion
 
             #region Exchange Amount (VND -> USD)
+
             decimal totalPrice = request.Seats.Count * 139000000;
             decimal exchangeRate = 0.000039m;
             long amountInCents = (long)(totalPrice * exchangeRate * 100);
+
             #endregion
 
             #region Create Payment Intent
+
             var options = new PaymentIntentCreateOptions
             {
                 Amount = amountInCents,
@@ -58,6 +63,7 @@ namespace PaymentService.Services
 
             var service = new PaymentIntentService();
             var paymentIntent = await service.CreateAsync(options);
+
             #endregion
 
             return paymentIntent;
@@ -86,6 +92,7 @@ namespace PaymentService.Services
                     paymentIntent.Metadata["PaymentRequestDTO"]);
 
                 await _publishEndpoint.Publish(new BookingCreateCommand(
+                    Guid.NewGuid(),
                     paymentRequestDTO.UserId,
                     paymentRequestDTO.ScreeningId,
                     paymentRequestDTO.Seats,
