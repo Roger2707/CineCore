@@ -34,7 +34,7 @@ builder.Services.AddDbContext<CinemaDBContext>(options =>
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICinemaService, CinemaService.Services.CinemaService>();
-builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<ITheaterService, TheaterService>();
 
 #endregion 
 
@@ -51,6 +51,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapGrpcService<GrpcCinemaService>();
-app.MapGrpcService<GrpcRoomService>();
 
 app.Run();

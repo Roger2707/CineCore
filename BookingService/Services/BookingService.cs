@@ -38,7 +38,7 @@ namespace BookingService.Services
 
         #endregion
 
-        #region Booking Flow
+        #region Booking Handle
 
         public async Task Create(BookingCreateRequestDTO request)
         {
@@ -48,40 +48,24 @@ namespace BookingService.Services
             if(request.Seats.Count == 0)
                 throw new ArgumentException("Please choose seats !");
 
-            var bookingCreatedId = Guid.NewGuid();
+            var bookingId = Guid.NewGuid();
             await _bookingRepository.BeginTransactionAsync();
             try
             {
-                #region Race Condition
-
-                foreach (var seat in request.Seats)
-                {
-                    var key = $"seat:{seat}:screen:{request.ScreeningId}";
-                    var existingValue = await _redis.StringGetAsync(key);
-                    if (existingValue != RedisValue.Null && existingValue != request.UserId.ToString())
-                        throw new ArgumentException($"Seat {seat} is not available");
-
-                    var held = await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromSeconds(100), When.NotExists);
-                    if (!held)
-                        throw new ArgumentException($"Seat {seat} is not held successfully ! someone is held");
-                }
-
-                #endregion
-
                 #region Create 
 
                 var booking = new Booking
-                { 
+                {
+                    Id = bookingId,
                     UserId = request.UserId,
                     ScreeningId = request.ScreeningId,
                     TotalPrice = request.Seats.Count * 139000000,
                     Created = DateTime.UtcNow,
-                    BookingStatus = BookingStatus.PENDING
+                    BookingStatus = BookingStatus.CONFIRMED,
+                    PaymentIntentId = request.PaymentIntentId,
                 };
                 await _bookingRepository.Create(booking);
-                await _bookingRepository.SaveChangeAsync();
 
-                bookingCreatedId = booking.Id;
                 var bookingSeats = request.Seats.Select(s =>
                 {
                     return new BookingSeat
@@ -103,23 +87,19 @@ namespace BookingService.Services
                     SeatIds = request.Seats,
                     ScreeningId = request.ScreeningId
                 });
-                _logger.LogInformation("Published BookingCreated event for {BookingId}", booking.Id);
+                _logger.LogInformation("Booking created successfully: {BookingId}", booking.Id);
 
                 await _bookingRepository.SaveChangeAsync();
                 await _bookingRepository.CommitTransactionAsync();
             }
-            catch (ArgumentException)
-            {
-                await _bookingRepository.RollbackTransactionAsync();
-                await _bookingRepository.PublishMessageAsync(new BookingFailed(bookingCreatedId));
-                throw;
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to publish BookingCreated event");
+                _logger.LogError(ex, "Failed to create booking: {BookingId}", bookingId);
+
                 await _bookingRepository.RollbackTransactionAsync();
-                await _bookingRepository.PublishMessageAsync(new BookingFailed(bookingCreatedId));
-                throw new Exception("Error when creating booking", ex);
+                await _bookingRepository.PublishMessageAsync(new BookingFailed(bookingId));
+                throw;
             }
         }
 

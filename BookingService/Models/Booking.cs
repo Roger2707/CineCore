@@ -10,5 +10,6 @@ namespace BookingService.Models
         public BookingStatus BookingStatus { get; set; } = BookingStatus.PENDING;
         public decimal TotalPrice { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;
+        public string PaymentIntentId { get; set; }
     }
 }

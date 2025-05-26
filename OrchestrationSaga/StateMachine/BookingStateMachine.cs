@@ -38,28 +38,59 @@ namespace OrchestrationSaga.StateMachine
 
         private void ConfigureStateMachine()
         {
-            Initially(
-                When(BookingCreatedEvent)
-                    .Then(ctx => Console.WriteLine($"[Saga] Created Booking Success, BookingId: {ctx.Message.BookingId}"))
-                    .Send(new Uri("queue:sending-email-ticket"), ctx => new EmailTicketCreated(ctx.Message.BookingId, "abc@gmail.com"))
-                    .TransitionTo(TicketSending)
-            );
+            //Initially(
+            //    When(BookingCreatedEvent)
+            //        .Then(ctx =>
+            //        {
+            //            Console.WriteLine($"[Saga] Booking created: {ctx.Message.BookingId}");
+            //            // Update seat status to BOOKED
+            //        })
+            //        .Send(new Uri("queue:update-seat-status"), ctx => new UpdateSeatStatus(
+            //            ctx.Message.ScreeningId,
+            //            ctx.Message.SeatIds,
+            //            SeatStatus.BOOKED))
+            //        .Send(new Uri("queue:sending-email-ticket"), ctx => new EmailTicketCreated(
+            //            ctx.Message.BookingId,
+            //            ctx.Message.UserId))
+            //        .TransitionTo(ProcessingTicket)
+            //);
 
-            During(TicketSending,
-                When(TicketDeliveredEvent)
-                    .Then(ctx => Console.WriteLine($"[Saga] Ticket delivered successfully for BookingId: {ctx.Message.BookingId}"))
-                    .TransitionTo(Completed)
-                    .Finalize()
-            );
+            //During(ProcessingTicket,
+            //    When(SeatUpdateCompletedEvent)
+            //        .Then(ctx => Console.WriteLine($"[Saga] Seats updated for: {ctx.Message.BookingId}"))
+            //        .TransitionTo(TicketSending),
 
-            DuringAny(
-                When(BookingFailedEvent)
-                    .Then(ctx => Console.WriteLine($"[Saga] Booking failed, bookingId: {ctx.Message.BookingId}"))
-                    .TransitionTo(Failed)
-                    .Finalize()
-            );
+            //    When(SeatUpdateFailedEvent)
+            //        .Then(ctx => Console.WriteLine($"[Saga] Seat update failed: {ctx.Message.BookingId}"))
+            //        .Send(new Uri("queue:refund-payment"), ctx => new RefundPayment(ctx.Message.PaymentIntentId))
+            //        .TransitionTo(Failed)
+            //);
 
-            SetCompletedWhenFinalized();
+            //During(TicketSending,
+            //    When(TicketDeliveredEvent)
+            //        .Then(ctx => Console.WriteLine($"[Saga] Ticket delivered: {ctx.Message.BookingId}"))
+            //        .TransitionTo(Completed)
+            //        .Finalize()
+            //);
+
+            //// Compensation logic
+            //DuringAny(
+            //    When(BookingFailedEvent)
+            //        .Then(ctx =>
+            //        {
+            //            Console.WriteLine($"[Saga] Booking failed: {ctx.Message.BookingId}");
+            //            // Release seats and refund if needed
+            //        })
+            //        .Send(new Uri("queue:release-seats"), ctx => new ReleaseSeatHold(
+            //            ctx.Message.ScreeningId,
+            //            ctx.Message.SeatIds))
+            //        .SendIf(ctx => !string.IsNullOrEmpty(ctx.Message.PaymentIntentId),
+            //            new Uri("queue:refund-payment"), ctx => new RefundPayment(ctx.Message.PaymentIntentId))
+            //        .TransitionTo(Failed)
+            //        .Finalize()
+            //);
+
+            //SetCompletedWhenFinalized();
         }
     }
 }

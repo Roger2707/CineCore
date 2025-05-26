@@ -23,7 +23,8 @@ namespace BookingService.Consumers
             {
                 UserId = context.Message.UserId,
                 ScreeningId = context.Message.ScreeningId,
-                Seats = context.Message.SeatIds
+                Seats = context.Message.SeatIds,
+                PaymentIntentId = context.Message.PaymentIntentId
             };
             await _bookingService.Create(request);
         }

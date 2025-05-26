@@ -13,10 +13,10 @@ namespace Contracts.BookingEvents
     public record BookingFinished(Guid BookingId, BookingStatus BookingStatus);
     public enum BookingStatus
     {
-        PENDING, SUCCESSED, CANCELLED, EXPIRED
+        PENDING, CONFIRMED, CANCELLED, REFUNDED
     }
 
-    public record BookingCreateCommand(Guid UserId, Guid ScreeningId, List<Guid> SeatIds);
+    public record BookingCreateCommand(Guid UserId, Guid ScreeningId, List<Guid> SeatIds, string PaymentIntentId);
     public record TicketDelivered(Guid BookingId);
     public record EmailTicketCreated(Guid BookingId, string UserEmail);
 }

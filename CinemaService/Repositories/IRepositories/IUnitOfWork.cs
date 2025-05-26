@@ -6,8 +6,10 @@
         Task SaveChangesAsync();
         Task CommitAsync();
         Task RollbackAsync();
+
         ICinemaRepository Cinema { get; }
-        IRoomRepository Room { get; }
+        ITheaterRepository Theater { get; }
         ISeatRepository Seat { get; }
+        IScreeningRepository Screening { get; }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace CinemaService.DTOs
 {
-    public class RoomCreateDTO
+    public class TheaterCreateDTO
     {
         [Required]
         public string Name { get; set; }
         [Required]
         public Guid CinemaId { get; set; }
         [Range(1, 10)]
-        public int NumberOfRow { get; set; }
+        public int TotalSeats { get; set; }
     }
 }

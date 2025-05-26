@@ -1,12 +1,15 @@
-﻿namespace CinemaService.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CinemaService.Models
 {
     public class Seat
     {
         public Guid Id { get; set; }
-        public string Row { get; set; }
-        public int Number { get; set; }
-        public Guid RoomId { get; set; }
-        public Room Room { get; set; }
-        public SeatStatus SeatStatus { get; set; } = SeatStatus.Empty;
+        public string RowName { get; set; } // A, B, C, etc.
+        public int SeatNumber { get; set; } // 1, 2, 3, etc.
+        public bool IsActive { get; set; } = true;
+        public Guid TheaterId { get; set; }
+        [ForeignKey("TheaterId")]
+        public Theater Theater { get; set; }
     }
 }

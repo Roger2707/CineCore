@@ -4,38 +4,38 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaService.Controllers
 {
-    [Route("api/rooms")]
+    [Route("api/theaters")]
     [ApiController]
-    public class RoomsController : ControllerBase
+    public class TheatersController : ControllerBase
     {
-        private readonly IRoomService _roomService;
+        private readonly ITheaterService _theaterService;
 
-        public RoomsController(IRoomService roomService)
+        public TheatersController(ITheaterService theaterService)
         {
-            _roomService = roomService;
+            _theaterService = theaterService;
         }
 
-        [HttpGet("get-all-in-cine")]
+        [HttpGet("get-all-in-cinema")]
         public async Task<IActionResult> GetAll(Guid cinemaId)
         {
-            var rooms = await _roomService.GetAll(cinemaId);
+            var rooms = await _theaterService.GetAll(cinemaId);
             return Ok(rooms);
         }
 
-        [HttpGet("get-room")]
+        [HttpGet("get-theater")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var room = await _roomService.GetRoom(id);
-            if(room == null) return NotFound("Room not found");
+            var room = await _theaterService.GetbyId(id);
+            if(room == null) return NotFound("Theater not found");
             return Ok(room);
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromBody] RoomCreateDTO roomCreateDTO)
+        public async Task<IActionResult> Create([FromBody] TheaterCreateDTO theaterCreateDTO)
         {
             try
             {
-                await _roomService.Create(roomCreateDTO);
+                await _theaterService.Create(theaterCreateDTO);
                 return Ok();
             }
             catch(Exception ex)
@@ -45,11 +45,11 @@ namespace CinemaService.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] RoomUpdateDTO roomUpdateDTO)
+        public async Task<IActionResult> Update(Guid id, [FromBody] TheaterUpdateDTO theaterUpdateDTO)
         {
             try
             {
-                await _roomService.UpdateRoom(id, roomUpdateDTO);
+                await _theaterService.Update(id, theaterUpdateDTO);
                 return Ok();
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace CinemaService.Controllers
         {
             try
             {
-                await _roomService.DeleteRoom(id);
+                await _theaterService.Delete(id);
                 return Ok();
             }
             catch (Exception ex)
