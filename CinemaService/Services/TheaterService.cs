@@ -44,6 +44,7 @@ namespace CinemaService.Services
                     TotalSeats = theaterCreateDTO.TotalSeats,
                 };
 
+                await _unitOfWork.Theater.Create(theater);
                 await _unitOfWork.SaveChangesAsync();
                 var seats = new List<Seat>();
                 for (int i = 0; i < theaterCreateDTO.TotalSeats / 10; i++)
@@ -61,9 +62,7 @@ namespace CinemaService.Services
                     }
                 }
 
-                await _unitOfWork.Theater.Create(theater);
                 await _unitOfWork.Seat.Create(seats);
-
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitAsync();
             }

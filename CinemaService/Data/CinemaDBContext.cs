@@ -1,6 +1,5 @@
 ﻿using CinemaService.Models;
 using Microsoft.EntityFrameworkCore;
-using static Grpc.Core.Metadata;
 
 namespace CinemaService.Data
 {
@@ -20,6 +19,20 @@ namespace CinemaService.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            #region Delete Configurations
+            modelBuilder.Entity<Screening>()
+                .HasOne(s => s.Cinema)
+                .WithMany()
+                .HasForeignKey(s => s.CinemaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Screening>()
+                .HasOne(s => s.Theater)
+                .WithMany()
+                .HasForeignKey(s => s.TheaterId)
+                .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
             modelBuilder.Entity<ScreeningSeat>()
                 .HasKey(ss => new { ss.ScreeningId, ss.SeatId });

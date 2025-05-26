@@ -1,0 +1,34 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MovieService";
+
+service GrpcMovie {
+    rpc GetMovie (GetMovieRequest) returns (GrpcMovieResponse);
+    rpc GetAllMovies (GetAllMoviesRequest) returns (GrpcMoviesResponse);
+}
+
+message GetMovieRequest {
+    string id = 1;
+}
+
+message GetAllMoviesRequest {
+    
+}
+
+message GrpcMovieModel {
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    int32 durationMinutes = 4;
+    string posterUrl = 5;
+    string publicId = 6;
+    repeated string genres = 7;
+}
+
+message GrpcMovieResponse {
+    GrpcMovieModel movie = 1;
+}
+
+message GrpcMoviesResponse {
+    repeated GrpcMovieModel movies = 1;
+}

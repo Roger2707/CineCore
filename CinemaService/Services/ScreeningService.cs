@@ -8,14 +8,23 @@ namespace CinemaService.Services
     public class ScreeningService : IScreeingService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly GrpcMovieClientService _grpcMovieClientService;
 
-        public ScreeningService(IUnitOfWork unitOfWork)
+        public ScreeningService(IUnitOfWork unitOfWork, GrpcMovieClientService grpcMovieClientService)
         {
             _unitOfWork = unitOfWork;
+            _grpcMovieClientService = grpcMovieClientService;
         }
 
         public async Task Create(ScreeningCreateDTO screeningCreateDTO)
         {
+            #region Validate Movie Existed
+
+            if(_grpcMovieClientService.GetMovieById(screeningCreateDTO.MovieId) == null)
+                throw new Exception("Movie not found");
+
+            #endregion
+
             var screening = new Screening
             {
                 MovieId = screeningCreateDTO.MovieId,

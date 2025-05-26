@@ -35,6 +35,10 @@ builder.Services.AddDbContext<CinemaDBContext>(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ICinemaService, CinemaService.Services.CinemaService>();
 builder.Services.AddScoped<ITheaterService, TheaterService>();
+builder.Services.AddScoped<IScreeingService, ScreeningService>();
+
+// gRPC
+builder.Services.AddScoped<GrpcMovieClientService>();
 
 #endregion 
 
