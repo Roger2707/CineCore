@@ -81,5 +81,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapGrpcService<GrpcCinemaService>();
+app.MapGrpcService<GrpcScreeningService>();
 
 app.Run();

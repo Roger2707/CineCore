@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingService.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20250520074638_createOutboxPatternDb")]
-    partial class createOutboxPatternDb
+    [Migration("20250527022333_createBookingSvDb")]
+    partial class createBookingSvDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace BookingService.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ScreeningId")
                         .HasColumnType("uniqueidentifier");
@@ -70,6 +73,8 @@ namespace BookingService.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
 
                     b.ToTable("BookingSeats");
                 });
@@ -242,6 +247,17 @@ namespace BookingService.Migrations
                     b.HasIndex("Created");
 
                     b.ToTable("OutboxState");
+                });
+
+            modelBuilder.Entity("BookingService.Models.BookingSeat", b =>
+                {
+                    b.HasOne("BookingService.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.OutboxMessage", b =>

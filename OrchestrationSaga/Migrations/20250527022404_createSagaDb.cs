@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrchestrationSaga.Migrations
 {
     /// <inheritdoc />
-    public partial class createOrchestrationSagaDb : Migration
+    public partial class createSagaDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,11 @@ namespace OrchestrationSaga.Migrations
                 {
                     CorrelationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CurrentState = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
-                    SeatHoldSuccess = table.Column<bool>(type: "bit", nullable: false),
-                    PaymentSuccess = table.Column<bool>(type: "bit", nullable: false)
+                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeatIds = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ScreeningId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {

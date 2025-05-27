@@ -60,16 +60,16 @@ namespace OrchestrationSaga.StateMachine
                         ctx.Message.UserId,
                         ctx.Message.PaymentIntentId
                     ))
-                    .Send(new Uri("queue:sending-email-ticket"), ctx => new EmailTicketCreated(
-                        ctx.Message.BookingId,
-                        "user@gmail.com"
-                    ))
                     .TransitionTo(ProcessingTicket)
             );
 
             During(ProcessingTicket,
                 When(SeatUpdateCompletedEvent)
                     .Then(ctx => Console.WriteLine($"[Saga] Seats updated for: {ctx.Message.BookingId}"))
+                    .Send(new Uri("queue:email-ticket-created"), ctx => new EmailTicketCreated(
+                        ctx.Message.BookingId,
+                        "user@gmail.com"
+                    ))
                     .TransitionTo(TicketSending),
 
                 When(SeatUpdateFailedEvent)
@@ -97,7 +97,7 @@ namespace OrchestrationSaga.StateMachine
                     .TransitionTo(Failed)
                     .Finalize()
             );
-            SetCompletedWhenFinalized();
+            //SetCompletedWhenFinalized();
         }
     }
 }

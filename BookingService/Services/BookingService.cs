@@ -31,7 +31,7 @@ namespace BookingService.Services
 
         public async Task<BookingDTO> GetBooking(Guid bookingId)
         {
-            var booking = await _bookingRepository.GetBooking(bookingId);   
+            var booking = await _bookingRepository.GetBooking(bookingId);
             if(booking == null) throw new ArgumentException("Booking Not Found");    
             return booking;
         }
@@ -59,7 +59,7 @@ namespace BookingService.Services
                     Id = bookingId,
                     UserId = request.UserId,
                     ScreeningId = request.ScreeningId,
-                    TotalPrice = request.Seats.Count * 139000000,
+                    TotalPrice = request.Seats.Count * 139000,
                     Created = DateTime.UtcNow,
                     BookingStatus = BookingStatus.CONFIRMED,
                     PaymentIntentId = request.PaymentIntentId,
@@ -85,7 +85,9 @@ namespace BookingService.Services
                 {
                     BookingId = booking.Id,
                     SeatIds = request.Seats,
-                    ScreeningId = request.ScreeningId
+                    ScreeningId = request.ScreeningId,
+                    PaymentIntentId = request.PaymentIntentId,
+                    UserId = request.UserId,
                 });
                 _logger.LogInformation("Booking created successfully: {BookingId}", booking.Id);
 

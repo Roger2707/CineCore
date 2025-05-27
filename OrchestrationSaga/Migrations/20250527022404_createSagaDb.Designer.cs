@@ -12,8 +12,8 @@ using OrchestrationSaga.Data;
 namespace OrchestrationSaga.Migrations
 {
     [DbContext(typeof(OrchestratorDbContext))]
-    [Migration("20250520071808_createOrchestrationSagaDb")]
-    partial class createOrchestrationSagaDb
+    [Migration("20250527022404_createSagaDb")]
+    partial class createSagaDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,15 +30,25 @@ namespace OrchestrationSaga.Migrations
                     b.Property<Guid>("CorrelationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("CurrentState")
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<bool>("PaymentSuccess")
-                        .HasColumnType("bit");
+                    b.Property<string>("PaymentIntentId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
-                    b.Property<bool>("SeatHoldSuccess")
-                        .HasColumnType("bit");
+                    b.Property<Guid>("ScreeningId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("SeatIds")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CorrelationId");
 

@@ -13,12 +13,20 @@ namespace PaymentService.Services
         private readonly IDatabase _redis;
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<PaymentService> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly string _apiKey;
 
-        public PaymentService(IConnectionMultiplexer redis, IPublishEndpoint publishEndpoint, ILogger<PaymentService> logger)
+        public PaymentService(IConnectionMultiplexer redis, IPublishEndpoint publishEndpoint, ILogger<PaymentService> logger, IConfiguration configuration)
         {
             _redis = redis.GetDatabase();
             _publishEndpoint = publishEndpoint;
             _logger = logger;
+            _configuration = configuration;
+            _apiKey = _configuration["Stripe:SecretKey"];
+
+            if (string.IsNullOrEmpty(_apiKey)) throw new Exception("Stripe API Key is missing from configuration.");
+            if (string.IsNullOrEmpty(StripeConfiguration.ApiKey))
+                StripeConfiguration.ApiKey = _apiKey;
         }
         public async Task<PaymentIntent> CreatePaymentIntentAsync(PaymentRequestDTO request)
         {
@@ -29,19 +37,18 @@ namespace PaymentService.Services
                 var key = $"seat:{seat}:screen:{request.ScreeningId}";
                 var existingValue = await _redis.StringGetAsync(key);
 
-                // Seat must be held by the same user
-                if (existingValue != request.UserId.ToString())
-                    throw new ArgumentException($"Seat {seat} is not held by you or has expired");
-
-                // Extend TTL for payment processing (10 minutes)
-                await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromMinutes(10));
+                if(string.IsNullOrEmpty(existingValue) || existingValue == request.UserId.ToString())
+                {
+                    await _redis.StringSetAsync(key, request.UserId.ToString(), TimeSpan.FromMinutes(10));
+                }
+                else throw new ArgumentException($"Seat {seat} is not held by you or has expired");
             }
 
             #endregion
 
             #region Exchange Amount (VND -> USD)
 
-            decimal totalPrice = request.Seats.Count * 139000000;
+            decimal totalPrice = request.Seats.Count * 139000;
             decimal exchangeRate = 0.000039m;
             long amountInCents = (long)(totalPrice * exchangeRate * 100);
 
@@ -53,7 +60,7 @@ namespace PaymentService.Services
             {
                 Amount = amountInCents,
                 Currency = "usd",
-                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions{ Enabled = true },
+                AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions{ Enabled = true, AllowRedirects = "never" },
                 Metadata = new Dictionary<string, string>
                 {
                     { "PaymentRequestDTO", JsonConvert.SerializeObject(request) },

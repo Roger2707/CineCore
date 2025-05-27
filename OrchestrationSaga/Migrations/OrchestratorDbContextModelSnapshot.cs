@@ -34,11 +34,18 @@ namespace OrchestrationSaga.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("PaymentIntentId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<Guid>("ScreeningId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SeatIds")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CorrelationId");
 

@@ -1,5 +1,6 @@
 using MassTransit;
 using PaymentService.Consumers;
+using PaymentService.Services.IServices;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,12 @@ builder.Services.AddMassTransit(x =>
 
 var redisConnectionString = builder.Configuration.GetValue<string>("Redis:ConnectionString");
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+
+#endregion
+
+#region Services
+
+builder.Services.AddScoped<IPaymentService, PaymentService.Services.PaymentService>();
 
 #endregion
 
