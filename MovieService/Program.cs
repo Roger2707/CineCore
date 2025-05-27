@@ -5,6 +5,7 @@ using MovieService.Repositories;
 using MovieService.Repositories.IRepositories;
 using MovieService.Services;
 using MovieService.Services.IService;
+using SharedAuth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,8 @@ builder.Services.AddMassTransit(x =>
 
 #region Services
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<CloudinaryService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService.Services.MovieService>();
@@ -61,6 +64,12 @@ builder.Services.AddScoped<IMovieService, MovieService.Services.MovieService>();
 #region Grpc
 
 builder.Services.AddGrpc();
+
+#endregion
+
+#region Authentication
+
+builder.Services.AddSharedJwtAuthentication(builder.Configuration);
 
 #endregion
 

@@ -1,8 +1,8 @@
-﻿using Contracts.BookingEvents;
-using MassTransit;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieService.DTOs;
 using MovieService.Services.IService;
+using System.Security.Claims;
 
 namespace MovieService.Controllers
 {
@@ -11,9 +11,11 @@ namespace MovieService.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
-        public MovieController(IMovieService movieService)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public MovieController(IMovieService movieService, IHttpContextAccessor httpContextAccessor)
         {
             _movieService = movieService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("get-all")]
@@ -28,7 +30,7 @@ namespace MovieService.Controllers
         {
             var movie = await _movieService.GetById(id);
 
-            if(movie == null)
+            if (movie == null)
                 return NotFound(new { message = "Movie not found" });
 
             return Ok(movie);
@@ -42,10 +44,10 @@ namespace MovieService.Controllers
                 await _movieService.CreateAsync(movieCreateDTO);
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
-            }   
+            }
         }
 
         [HttpPut("update")]
@@ -69,6 +71,24 @@ namespace MovieService.Controllers
             {
                 await _movieService.DeleteAsync(id);
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet("test-auth")]
+        public IActionResult GetUser()
+        {
+            try
+            {
+                var user = _httpContextAccessor.HttpContext?.User;
+                var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var email = user?.FindFirst(ClaimTypes.Email)?.Value;
+                var role = user?.FindFirst(ClaimTypes.Role)?.Value;
+                return Ok(new { userId, email, role });
             }
             catch (Exception ex)
             {

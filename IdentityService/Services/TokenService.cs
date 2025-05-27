@@ -27,8 +27,9 @@ namespace IdentityService.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim("jti", Guid.NewGuid().ToString()),
+                new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };
-
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
             {
@@ -40,9 +41,9 @@ namespace IdentityService.Services
 
             var tokenOptions = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
-                audience: "all-services",
+                audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(7),
+                expires: DateTime.UtcNow.AddMinutes(double.Parse(_config["Jwt:ExpirationMinutes"])),
                 signingCredentials: creds
             );
 
