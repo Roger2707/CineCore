@@ -92,7 +92,6 @@ namespace OrchestrationSaga.StateMachine
                     .Then(ctx => Console.WriteLine($"[Saga] Event Saga failed: {ctx.Message.BookingId}"))
                     // Will add refund later (because check out success happen earlier than booking)
                     .TransitionTo(Failed)
-                    .Finalize()
             );
             //SetCompletedWhenFinalized();
         }

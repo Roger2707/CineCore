@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSendingService", "EmailSendingService\EmailSendingService.csproj", "{F1EBBFFC-544E-4CDA-8093-2F77D59995E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "IdentityService\IdentityService.csproj", "{D2426F96-DF24-4351-B7D5-F909BF86C9FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{F1EBBFFC-544E-4CDA-8093-2F77D59995E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1EBBFFC-544E-4CDA-8093-2F77D59995E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1EBBFFC-544E-4CDA-8093-2F77D59995E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2426F96-DF24-4351-B7D5-F909BF86C9FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2426F96-DF24-4351-B7D5-F909BF86C9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2426F96-DF24-4351-B7D5-F909BF86C9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2426F96-DF24-4351-B7D5-F909BF86C9FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
