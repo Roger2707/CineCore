@@ -114,7 +114,6 @@ namespace BookingService.Services
                 await _redis.KeyDeleteAsync(key);
             });
             await Task.WhenAll(tasks);
-            await _bookingRepository.SaveChangeAsync();
         }
 
         #endregion
@@ -125,6 +124,11 @@ namespace BookingService.Services
         {
             var screening = _grpcScreeningClientService.GetScreening(screeningId);
             return screening != null;
+        }
+
+        public async Task SaveChangeAsync()
+        {
+            await _bookingRepository.SaveChangeAsync();
         }
 
         #endregion

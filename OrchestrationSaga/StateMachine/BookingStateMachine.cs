@@ -11,7 +11,7 @@ namespace OrchestrationSaga.StateMachine
         public State Failed { get; }
 
         public Event<BookingCreated> BookingCreatedEvent { get; }
-        public Event<BookingFailed> BookingFailedEvent { get; }
+        public Event<FailedSagaEvent> FailedSagaEvent { get; }
         public Event<SeatUpdateCompleted> SeatUpdateCompletedEvent { get; }
         public Event<SeatUpdateFailed> SeatUpdateFailedEvent { get; }
         public Event<TicketDelivered> TicketDeliveredEvent { get; }
@@ -35,10 +35,10 @@ namespace OrchestrationSaga.StateMachine
                     PaymentIntentId = ctx.Message.PaymentIntentId
                 });
             });
-            Event(() => BookingFailedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
             Event(() => SeatUpdateCompletedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
             Event(() => SeatUpdateFailedEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
             Event(() => TicketDeliveredEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
+            Event(() => FailedSagaEvent, x => x.CorrelateById(ctx => ctx.Message.BookingId));
 
             ConfigureStateMachine();
         }
@@ -75,11 +75,8 @@ namespace OrchestrationSaga.StateMachine
                 When(SeatUpdateFailedEvent)
                     .Then(ctx => Console.WriteLine($"[Saga] Seat update failed: {ctx.Message.BookingId}"))
                     .TransitionTo(Failed)
-                    .Send(new Uri("queue:booking-failed"), ctx => new BookingFailed(
-                        ctx.Message.BookingId,
-                        ctx.Message.ScreeningId,
-                        ctx.Message.Seats
-                    ))
+                    .Send(new Uri("queue:processing-failed-saga")
+                        , ctx => new ProcessingFailedSaga(ctx.Message.BookingId, ctx.Message.Seats, ctx.Message.ScreeningId, ctx.Message.PaymentIntentId))
             );
 
             During(TicketSending,
@@ -91,8 +88,8 @@ namespace OrchestrationSaga.StateMachine
 
             // Compensation logic
             DuringAny(
-                When(BookingFailedEvent)
-                    .Then(ctx => Console.WriteLine($"[Saga] Booking failed: {ctx.Message.BookingId}"))
+                When(FailedSagaEvent)
+                    .Then(ctx => Console.WriteLine($"[Saga] Event Saga failed: {ctx.Message.BookingId}"))
                     // Will add refund later (because check out success happen earlier than booking)
                     .TransitionTo(Failed)
                     .Finalize()

@@ -11,7 +11,6 @@ namespace Contracts.BookingEvents
         public string PaymentIntentId { get; set; }
         public Guid CorrelationId => BookingId;
     }
-    public record BookingFailed(Guid BookingId, Guid ScreeningId, List<Guid> Seats);
     public record BookingFinished(Guid BookingId, BookingStatus BookingStatus);
     public enum BookingStatus{ PENDING, CONFIRMED, CANCELLED, REFUNDED }
     public record BookingCreateCommand(Guid BookingId, Guid UserId, Guid ScreeningId, List<Guid> SeatIds, string PaymentIntentId);

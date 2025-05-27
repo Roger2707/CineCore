@@ -21,8 +21,7 @@ namespace PaymentService.Consumers
             // Will add stripe refund event later
 
             await _publishEndpoint.Publish(
-                new BookingFailed(context.Message.BookingId, context.Message.ScreeningId
-                , context.Message.Seats)
+                new FailedSagaEvent(context.Message.BookingId)
             );
         }
     }

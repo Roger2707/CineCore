@@ -59,6 +59,11 @@ builder.Services.AddMassTransit(x =>
             e.ConfigureConsumer<BookingCreateCommandConsumer>(context);
         });
 
+        cfg.ReceiveEndpoint("processing-failed-saga", e =>
+        {
+            e.ConfigureConsumer<ProcessingFailedSagaConsumer>(context);
+        });
+
         cfg.ReceiveEndpoint("release-seats-hold", e =>
         {
             e.ConfigureConsumer<ReleaseSeatHoldConsumer>(context);

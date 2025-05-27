@@ -44,7 +44,7 @@ namespace BookingService.Consumers
             var message = context.Message.Message;
             _logger.LogError("BookingCreateCommand failed after retries for PaymentIntent {PaymentIntentId}", message.PaymentIntentId);
 
-            await _publishEndpoint.Publish(new BookingFailed(message.BookingId, message.ScreeningId, message.SeatIds));
+            await _publishEndpoint.Publish(new FailedSagaEvent(message.BookingId));
         }
     }
 }
