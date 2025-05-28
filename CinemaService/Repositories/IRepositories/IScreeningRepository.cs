@@ -1,7 +1,7 @@
-﻿using CinemaService.Models;
+﻿using P2.CinemaService.Models;
 using Contracts.BookingEvents;
 
-namespace CinemaService.Repositories.IRepositories
+namespace P2.CinemaService.Repositories.IRepositories
 {
     public interface IScreeningRepository
     {

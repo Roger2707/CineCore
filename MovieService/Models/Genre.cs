@@ -1,4 +1,4 @@
-﻿namespace MovieService.Models
+﻿namespace P1.MovieService.Models
 {
     public enum Genre
     {

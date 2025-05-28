@@ -1,9 +1,9 @@
-﻿using BookingService.DTOs;
-using CinemaService;
+﻿using P4.BookingService.DTOs;
 using Grpc.Core;
 using Grpc.Net.Client;
+using P2.CinemaService;
 
-namespace BookingService.Services
+namespace P4.BookingService.Services
 {
     public class GrpcScreeningClientService
     {

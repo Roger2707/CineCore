@@ -1,4 +1,4 @@
-﻿namespace BookingService.DTOs
+﻿namespace P4.BookingService.DTOs
 {
     public class BookingRetrieveRow
     {

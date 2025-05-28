@@ -1,7 +1,7 @@
-﻿using CinemaService.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using P2.CinemaService.Models;
 
-namespace CinemaService.Data
+namespace P2.CinemaService.Data
 {
     public class CinemaDBContext : DbContext
     {

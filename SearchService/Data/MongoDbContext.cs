@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using SearchService.DB;
 
-namespace SearchService.Data
+namespace P3.SearchService.Data
 {
     public class MongoDbContext : IMongoDbContext
     {

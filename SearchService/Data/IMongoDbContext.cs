@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace SearchService.Data
+namespace P3.SearchService.Data
 {
     public interface IMongoDbContext
     {

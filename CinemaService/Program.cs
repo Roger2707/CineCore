@@ -1,11 +1,11 @@
-using CinemaService.Consumers;
-using CinemaService.Data;
-using CinemaService.Repositories;
-using CinemaService.Repositories.IRepositories;
-using CinemaService.Services;
-using CinemaService.Services.IServices;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using P2.CinemaService.Consumers;
+using P2.CinemaService.Data;
+using P2.CinemaService.Repositories;
+using P2.CinemaService.Repositories.IRepositories;
+using P2.CinemaService.Services;
+using P2.CinemaService.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +59,7 @@ builder.Services.AddMassTransit(x =>
 #region Services
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<ICinemaService, CinemaService.Services.CinemaService>();
+builder.Services.AddScoped<ICinemaService, P2.CinemaService.Services.CinemaService>();
 builder.Services.AddScoped<ITheaterService, TheaterService>();
 builder.Services.AddScoped<IScreeingService, ScreeningService>();
 

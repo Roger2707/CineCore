@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "MovieService";
+option csharp_namespace = "P1.MovieService";
 
 service GrpcMovie {
     rpc GetMovie (GetMovieRequest) returns (GrpcMovieResponse);

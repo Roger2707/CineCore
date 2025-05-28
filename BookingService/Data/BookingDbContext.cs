@@ -1,8 +1,8 @@
-﻿using BookingService.Models;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using P4.BookingService.Models;
 
-namespace BookingService.Data
+namespace P4.BookingService.Data
 {
     public class BookingDbContext : DbContext
     {

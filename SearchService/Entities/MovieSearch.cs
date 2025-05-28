@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace SearchService.Entities
+namespace P3.SearchService.Entities
 {
     public class MovieSearch
     {

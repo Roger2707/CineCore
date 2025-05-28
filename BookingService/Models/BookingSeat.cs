@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BookingService.Models
+namespace P4.BookingService.Models
 {
     public class BookingSeat
     {

@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
-using MovieService.Services.IService;
+using P1.MovieService.Services.IService;
 
-namespace MovieService.Services
+namespace P1.MovieService.Services
 {
     public class GrpcMovieService : GrpcMovie.GrpcMovieBase
     {

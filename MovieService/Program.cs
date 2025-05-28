@@ -1,10 +1,10 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using MovieService.Data;
-using MovieService.Repositories;
-using MovieService.Repositories.IRepositories;
-using MovieService.Services;
-using MovieService.Services.IService;
+using P1.MovieService.Data;
+using P1.MovieService.Repositories;
+using P1.MovieService.Repositories.IRepositories;
+using P1.MovieService.Services;
+using P1.MovieService.Services.IService;
 using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,10 +21,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<MovieDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
-
-#endregion
-
-#region Identity
 
 #endregion
 
@@ -57,7 +53,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<CloudinaryService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-builder.Services.AddScoped<IMovieService, MovieService.Services.MovieService>();
+builder.Services.AddScoped<IMovieService, P1.MovieService.Services.MovieService>();
 
 #endregion 
 

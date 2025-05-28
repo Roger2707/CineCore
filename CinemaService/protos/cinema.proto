@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "CinemaService";
+option csharp_namespace = "P2.CinemaService";
 
 service GrpcCinema {
     rpc GetCinema (GetCinemaRequest) returns (GrpcCinemaResponse);

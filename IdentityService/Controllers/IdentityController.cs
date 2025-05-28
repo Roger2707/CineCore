@@ -1,9 +1,9 @@
-﻿using IdentityService.DTOs;
-using IdentityService.Services.IServices;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using P8.IdentityService.DTOs;
+using P8.IdentityService.Services.IServices;
 
-namespace IdentityService.Controllers
+namespace P8.IdentityService.Controllers
 {
     [Route("api/identity")]
     [ApiController]

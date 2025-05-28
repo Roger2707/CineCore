@@ -1,8 +1,8 @@
-﻿using CinemaService.DTOs;
-using CinemaService.Services.IServices;
+﻿using P2.CinemaService.DTOs;
+using P2.CinemaService.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CinemaService.Controllers
+namespace P2.CinemaService.Controllers
 {
     [Route("api/theaters")]
     [ApiController]

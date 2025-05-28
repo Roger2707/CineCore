@@ -1,4 +1,4 @@
-﻿namespace IdentityService.DTOs
+﻿namespace P8.IdentityService.DTOs
 {
     public class UserDTO
     {

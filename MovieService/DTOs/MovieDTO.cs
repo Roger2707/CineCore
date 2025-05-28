@@ -1,4 +1,4 @@
-﻿namespace MovieService.DTOs
+﻿namespace P1.MovieService.DTOs
 {
     public class MovieDTO
     {

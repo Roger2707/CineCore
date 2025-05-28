@@ -2,11 +2,10 @@
 using MassTransit;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using SearchService.Data;
-using SearchService.DB;
-using SearchService.Entities;
+using P3.SearchService.Data;
+using P3.SearchService.Entities;
 
-namespace SearchService.Consumers
+namespace P3.SearchService.Consumers
 {
     public class MovieDeletedConsumer : IConsumer<MovieDeleted>
     {

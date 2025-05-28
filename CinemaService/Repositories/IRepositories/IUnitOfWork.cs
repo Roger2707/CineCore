@@ -1,4 +1,4 @@
-﻿namespace CinemaService.Repositories.IRepositories
+﻿namespace P2.CinemaService.Repositories.IRepositories
 {
     public interface IUnitOfWork
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace IdentityService.DTOs
+namespace P8.IdentityService.DTOs
 {
     public class LoginRequestDTO
     {

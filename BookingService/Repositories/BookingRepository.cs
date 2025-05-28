@@ -1,13 +1,13 @@
-﻿using BookingService.Data;
-using BookingService.DTOs;
-using BookingService.Models;
-using BookingService.Repositories.IRepositories;
-using Contracts.BookingEvents;
+﻿using Contracts.BookingEvents;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using P4.BookingService.Data;
+using P4.BookingService.DTOs;
+using P4.BookingService.Models;
+using P4.BookingService.Repositories.IRepositories;
 
-namespace BookingService.Repositories
+namespace P4.BookingService.Repositories
 {
     public class BookingRepository : IBookingRepository
     {

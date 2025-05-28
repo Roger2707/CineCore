@@ -1,9 +1,9 @@
-﻿using CinemaService.DTOs;
-using CinemaService.Models;
-using CinemaService.Repositories.IRepositories;
-using CinemaService.Services.IServices;
+﻿using P2.CinemaService.DTOs;
+using P2.CinemaService.Models;
+using P2.CinemaService.Repositories.IRepositories;
+using P2.CinemaService.Services.IServices;
 
-namespace CinemaService.Services
+namespace P2.CinemaService.Services
 {
     public class CinemaService : ICinemaService
     {

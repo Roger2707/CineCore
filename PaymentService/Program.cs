@@ -1,6 +1,6 @@
 using MassTransit;
-using PaymentService.Consumers;
-using PaymentService.Services.IServices;
+using P5.PaymentService.Consumers;
+using P5.PaymentService.Services.IServices;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);

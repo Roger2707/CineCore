@@ -3,25 +3,27 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieService", "MovieService\MovieService.csproj", "{9A544CA4-DF8B-49A8-8EBE-37A9A3650125}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P1.MovieService", "MovieService\P1.MovieService.csproj", "{9A544CA4-DF8B-49A8-8EBE-37A9A3650125}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaService", "CinemaService\CinemaService.csproj", "{8A1C2C14-E564-44F4-B035-3E0DD4C46749}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P2.CinemaService", "CinemaService\P2.CinemaService.csproj", "{8A1C2C14-E564-44F4-B035-3E0DD4C46749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchService", "SearchService\SearchService.csproj", "{9FB0EE9A-D98B-4FB6-BDC5-BA5D2F573650}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P3.SearchService", "SearchService\P3.SearchService.csproj", "{9FB0EE9A-D98B-4FB6-BDC5-BA5D2F573650}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{49987182-99D2-4399-AA0C-B8C1892DEDE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingService", "BookingService\BookingService.csproj", "{519E7F52-81C4-466E-8124-048614012CE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P4.BookingService", "BookingService\P4.BookingService.csproj", "{519E7F52-81C4-466E-8124-048614012CE9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrchestrationSaga", "OrchestrationSaga\OrchestrationSaga.csproj", "{C0D5E2E9-81A0-4AC6-906C-762A77D9C5A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{CDBDF871-235C-4829-9F73-4AD6D365161E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P5.PaymentService", "PaymentService\P5.PaymentService.csproj", "{CDBDF871-235C-4829-9F73-4AD6D365161E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSendingService", "EmailSendingService\EmailSendingService.csproj", "{F1EBBFFC-544E-4CDA-8093-2F77D59995E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P6.EmailSendingService", "EmailSendingService\P6.EmailSendingService.csproj", "{F1EBBFFC-544E-4CDA-8093-2F77D59995E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "IdentityService\IdentityService.csproj", "{D2426F96-DF24-4351-B7D5-F909BF86C9FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P8.IdentityService", "IdentityService\P8.IdentityService.csproj", "{D2426F96-DF24-4351-B7D5-F909BF86C9FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "SharedAuth\Shared.csproj", "{4805479A-A3FF-44EE-B473-4CCA6D6CCB87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7.NotificationService", "NotificationService\P7.NotificationService.csproj", "{BC754E5A-1694-4937-854D-6FB5262A73E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{4805479A-A3FF-44EE-B473-4CCA6D6CCB87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4805479A-A3FF-44EE-B473-4CCA6D6CCB87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4805479A-A3FF-44EE-B473-4CCA6D6CCB87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC754E5A-1694-4937-854D-6FB5262A73E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC754E5A-1694-4937-854D-6FB5262A73E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC754E5A-1694-4937-854D-6FB5262A73E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC754E5A-1694-4937-854D-6FB5262A73E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

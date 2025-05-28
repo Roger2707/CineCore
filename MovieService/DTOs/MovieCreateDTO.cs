@@ -1,7 +1,7 @@
-﻿using MovieService.Models;
+﻿using P1.MovieService.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace MovieService.DTOs
+namespace P1.MovieService.DTOs
 {
     public class MovieCreateDTO
     {

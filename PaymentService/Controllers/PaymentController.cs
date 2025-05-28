@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PaymentService.DTOs;
-using PaymentService.Services.IServices;
+using P5.PaymentService.DTOs;
+using P5.PaymentService.Services.IServices;
 using Stripe;
 
-namespace PaymentService.Controllers
+namespace P5.PaymentService.Controllers
 {
     [Route("api/payments")]
     [ApiController]

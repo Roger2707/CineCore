@@ -1,11 +1,11 @@
-using IdentityService.Data;
-using IdentityService.Models;
-using IdentityService.Services;
-using IdentityService.Services.IServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using P8.IdentityService.Data;
+using P8.IdentityService.Models;
+using P8.IdentityService.Services;
+using P8.IdentityService.Services.IServices;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -66,7 +66,7 @@ builder.Services.AddAuthorization();
 #region Services
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IIdentityService, IdentityService.Services.IdentityService>();
+builder.Services.AddScoped<IIdentityService, P8.IdentityService.Services.IdentityService>();
 
 #endregion 
 

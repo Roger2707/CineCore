@@ -1,12 +1,12 @@
-﻿using IdentityService.Models;
-using IdentityService.Services.IServices;
+﻿using P8.IdentityService.Models;
+using P8.IdentityService.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace IdentityService.Services
+namespace P8.IdentityService.Services
 {
     public class TokenService : ITokenService
     {

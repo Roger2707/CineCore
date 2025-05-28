@@ -1,6 +1,6 @@
-﻿using BookingService.DTOs;
+﻿using P4.BookingService.DTOs;
 
-namespace BookingService.Services.IServices
+namespace P4.BookingService.Services.IServices
 {
     public interface IBookingService
     {

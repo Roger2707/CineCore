@@ -1,9 +1,9 @@
-﻿using CinemaService.DTOs;
+﻿using P1.MovieService;
+using P2.CinemaService.DTOs;
 using Grpc.Core;
 using Grpc.Net.Client;
-using MovieService;
 
-namespace CinemaService.Services
+namespace P2.CinemaService.Services
 {
     public class GrpcMovieClientService
     {

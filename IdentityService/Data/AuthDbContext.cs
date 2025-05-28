@@ -1,9 +1,9 @@
-﻿using IdentityService.Models;
+﻿using P8.IdentityService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityService.Data
+namespace P8.IdentityService.Data
 {
     public class AuthDbContext : IdentityDbContext<User, Role, Guid>
     {

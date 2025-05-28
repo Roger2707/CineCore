@@ -1,4 +1,4 @@
-﻿namespace PaymentService.DTOs
+﻿namespace P5.PaymentService.DTOs
 {
     public class PaymentRequestDTO
     {

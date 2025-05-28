@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SearchService.Services;
+using P3.SearchService.Services;
 
-namespace SearchService.Controllers
+namespace P3.SearchService.Controllers
 {
     [Route("api/search")]
     [ApiController]

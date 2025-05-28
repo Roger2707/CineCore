@@ -1,8 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using MovieService.Models;
+using P1.MovieService.Models;
 
-namespace MovieService.Data
+namespace P1.MovieService.Data
 {
     public class MovieDBContext : DbContext
     {

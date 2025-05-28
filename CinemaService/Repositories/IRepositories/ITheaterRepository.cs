@@ -1,7 +1,6 @@
-﻿using CinemaService.DTOs;
-using CinemaService.Models;
+﻿using P2.CinemaService.Models;
 
-namespace CinemaService.Repositories.IRepositories
+namespace P2.CinemaService.Repositories.IRepositories
 {
     public interface ITheaterRepository
     {

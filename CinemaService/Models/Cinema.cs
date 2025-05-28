@@ -1,4 +1,4 @@
-﻿namespace CinemaService.Models
+﻿namespace P2.CinemaService.Models
 {
     public class Cinema
     {

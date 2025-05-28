@@ -1,8 +1,8 @@
-﻿using BookingService.DTOs;
-using BookingService.Services.IServices;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using P4.BookingService.DTOs;
+using P4.BookingService.Services.IServices;
 
-namespace BookingService.Controllers
+namespace P4.BookingService.Controllers
 {
     [Route("api/bookings")]
     [ApiController]

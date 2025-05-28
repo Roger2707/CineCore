@@ -1,8 +1,8 @@
 ﻿using Contracts.BookingEvents;
 using MassTransit;
 using Newtonsoft.Json;
-using PaymentService.DTOs;
-using PaymentService.Services.IServices;
+using P5.PaymentService.DTOs;
+using P5.PaymentService.Services.IServices;
 using StackExchange.Redis;
 using Stripe;
 

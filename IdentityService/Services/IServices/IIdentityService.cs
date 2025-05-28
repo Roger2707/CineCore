@@ -1,6 +1,6 @@
-﻿using IdentityService.DTOs;
+﻿using P8.IdentityService.DTOs;
 
-namespace IdentityService.Services.IServices
+namespace P8.IdentityService.Services.IServices
 {
     public interface IIdentityService
     {

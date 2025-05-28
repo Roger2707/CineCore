@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace IdentityService.Models
+namespace P8.IdentityService.Models
 {
     public class Role : IdentityRole<Guid>
     {

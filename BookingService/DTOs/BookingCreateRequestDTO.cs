@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookingService.DTOs
+namespace P4.BookingService.DTOs
 {
     public class BookingCreateRequestDTO
     {

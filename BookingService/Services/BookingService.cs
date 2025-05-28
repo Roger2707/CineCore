@@ -1,11 +1,11 @@
-﻿using BookingService.DTOs;
-using BookingService.Models;
-using BookingService.Repositories.IRepositories;
-using BookingService.Services.IServices;
-using Contracts.BookingEvents;
+﻿using Contracts.BookingEvents;
+using P4.BookingService.DTOs;
+using P4.BookingService.Models;
+using P4.BookingService.Repositories.IRepositories;
+using P4.BookingService.Services.IServices;
 using StackExchange.Redis;
 
-namespace BookingService.Services
+namespace P4.BookingService.Services
 {
     public class BookingService : IBookingService
     {

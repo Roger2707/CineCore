@@ -1,7 +1,7 @@
 ﻿using Contracts.BookingEvents;
 using MassTransit;
 
-namespace PaymentService.Consumers
+namespace P5.PaymentService.Consumers
 {
     public class PaymentRefundConsumer : IConsumer<PaymentRefund>
     {

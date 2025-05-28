@@ -1,6 +1,6 @@
-using EmailSendingService.Consumers;
-using EmailSendingService.Services;
 using MassTransit;
+using P6.EmailSendingService.Consumers;
+using P6.EmailSendingService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

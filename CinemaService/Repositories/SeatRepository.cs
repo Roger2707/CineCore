@@ -1,8 +1,8 @@
-﻿using CinemaService.Data;
-using CinemaService.Models;
-using CinemaService.Repositories.IRepositories;
+﻿using P2.CinemaService.Data;
+using P2.CinemaService.Models;
+using P2.CinemaService.Repositories.IRepositories;
 
-namespace CinemaService.Repositories
+namespace P2.CinemaService.Repositories
 {
     public class SeatRepository : ISeatRepository
     {

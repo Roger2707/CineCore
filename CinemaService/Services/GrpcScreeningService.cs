@@ -1,7 +1,7 @@
-﻿using CinemaService.Services.IServices;
+﻿using P2.CinemaService.Services.IServices;
 using Grpc.Core;
 
-namespace CinemaService.Services
+namespace P2.CinemaService.Services
 {
     public class GrpcScreeningService : GrpcScreening.GrpcScreeningBase
     {

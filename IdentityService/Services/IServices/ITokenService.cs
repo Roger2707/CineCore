@@ -1,6 +1,6 @@
-﻿using IdentityService.Models;
+﻿using P8.IdentityService.Models;
 
-namespace IdentityService.Services.IServices
+namespace P8.IdentityService.Services.IServices
 {
     public interface ITokenService
     {

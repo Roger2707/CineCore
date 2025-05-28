@@ -1,7 +1,7 @@
-﻿using PaymentService.DTOs;
+﻿using P5.PaymentService.DTOs;
 using Stripe;
 
-namespace PaymentService.Services.IServices
+namespace P5.PaymentService.Services.IServices
 {
     public interface IPaymentService
     {

@@ -1,6 +1,6 @@
 ﻿using Contracts.BookingEvents;
 
-namespace BookingService.Models
+namespace P4.BookingService.Models
 {
     public class Booking
     {

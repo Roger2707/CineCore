@@ -1,4 +1,4 @@
-﻿namespace SearchService.DB
+﻿namespace P3.SearchService.Data
 {
     public class MongoDbSettings
     {

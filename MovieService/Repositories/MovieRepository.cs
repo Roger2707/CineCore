@@ -1,13 +1,13 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using MovieService.Data;
-using MovieService.DTOs;
-using MovieService.Models;
-using MovieService.Repositories.IRepositories;
+using P1.MovieService.Data;
+using P1.MovieService.DTOs;
+using P1.MovieService.Models;
+using P1.MovieService.Repositories.IRepositories;
 using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 using static Shared.Extensions.DynamicQueries.QueryablePagedExtensions;
 
-namespace MovieService.Repositories
+namespace P1.MovieService.Repositories
 {
     public class MovieRepository : IMovieRepository
     {

@@ -1,7 +1,7 @@
-﻿using BookingService.DTOs;
-using BookingService.Models;
+﻿using P4.BookingService.DTOs;
+using P4.BookingService.Models;
 
-namespace BookingService.Repositories.IRepositories
+namespace P4.BookingService.Repositories.IRepositories
 {
     public interface IBookingRepository
     {

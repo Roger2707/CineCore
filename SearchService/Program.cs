@@ -1,10 +1,9 @@
 using MassTransit;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using SearchService.Consumers;
-using SearchService.Data;
-using SearchService.DB;
-using SearchService.Services;
+using P3.SearchService.Consumers;
+using P3.SearchService.Data;
+using P3.SearchService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

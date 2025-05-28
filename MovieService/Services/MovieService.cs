@@ -1,13 +1,13 @@
 ﻿using Contracts;
 using MassTransit;
-using MovieService.DTOs;
-using MovieService.Models;
-using MovieService.Repositories.IRepositories;
-using MovieService.Services.IService;
+using P1.MovieService.DTOs;
+using P1.MovieService.Models;
+using P1.MovieService.Repositories.IRepositories;
+using P1.MovieService.Services.IService;
 using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 using static Shared.Extensions.DynamicQueries.QueryablePagedExtensions;
 
-namespace MovieService.Services
+namespace P1.MovieService.Services
 {
     public class MovieService : IMovieService
     {

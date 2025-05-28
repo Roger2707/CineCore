@@ -1,9 +1,9 @@
-﻿using BookingService.DTOs;
-using BookingService.Services.IServices;
-using Contracts.BookingEvents;
+﻿using Contracts.BookingEvents;
 using MassTransit;
+using P4.BookingService.DTOs;
+using P4.BookingService.Services.IServices;
 
-namespace BookingService.Consumers
+namespace P4.BookingService.Consumers
 {
     public class BookingCreateCommandConsumer : IConsumer<BookingCreateCommand>, IConsumer<Fault<BookingCreateCommand>>
     {

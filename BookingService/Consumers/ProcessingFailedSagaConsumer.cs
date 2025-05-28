@@ -1,8 +1,8 @@
-﻿using BookingService.Services.IServices;
+﻿using P4.BookingService.Services.IServices;
 using Contracts.BookingEvents;
 using MassTransit;
 
-namespace BookingService.Consumers
+namespace P4.BookingService.Consumers
 {
     public class ProcessingFailedSagaConsumer : IConsumer<ProcessingFailedSaga>, IConsumer<Fault<ProcessingFailedSaga>>
     {

@@ -1,9 +1,9 @@
-﻿using MovieService.DTOs;
-using MovieService.Models;
+﻿using P1.MovieService.DTOs;
+using P1.MovieService.Models;
 using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 using static Shared.Extensions.DynamicQueries.QueryablePagedExtensions;
 
-namespace MovieService.Repositories.IRepositories
+namespace P1.MovieService.Repositories.IRepositories
 {
     public interface IMovieRepository
     {

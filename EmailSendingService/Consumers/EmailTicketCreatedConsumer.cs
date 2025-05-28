@@ -1,8 +1,8 @@
 ﻿using Contracts.BookingEvents;
-using EmailSendingService.Services;
+using P6.EmailSendingService.Services;
 using MassTransit;
 
-namespace EmailSendingService.Consumers
+namespace P6.EmailSendingService.Consumers
 {
     public class EmailTicketCreatedConsumer : IConsumer<EmailTicketCreated>
     {

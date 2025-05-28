@@ -1,10 +1,10 @@
-﻿using CinemaService.Data;
-using CinemaService.Models;
-using CinemaService.Repositories.IRepositories;
-using Contracts.BookingEvents;
+﻿using Contracts.BookingEvents;
 using Microsoft.EntityFrameworkCore;
+using P2.CinemaService.Data;
+using P2.CinemaService.Models;
+using P2.CinemaService.Repositories.IRepositories;
 
-namespace CinemaService.Repositories
+namespace P2.CinemaService.Repositories
 {
     public class ScreeningRepository : IScreeningRepository
     {

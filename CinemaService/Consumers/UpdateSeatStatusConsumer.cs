@@ -1,8 +1,8 @@
-﻿using CinemaService.Services.IServices;
+﻿using P2.CinemaService.Services.IServices;
 using Contracts.BookingEvents;
 using MassTransit;
 
-namespace CinemaService.Consumers
+namespace P2.CinemaService.Consumers
 {
     public class UpdateSeatStatusConsumer : IConsumer<UpdateSeatStatus>, IConsumer<Fault<UpdateSeatStatus>>
     {

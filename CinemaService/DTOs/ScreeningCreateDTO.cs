@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CinemaService.DTOs
+namespace P2.CinemaService.DTOs
 {
     public class ScreeningCreateDTO
     {

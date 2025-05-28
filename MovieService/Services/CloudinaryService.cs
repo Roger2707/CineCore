@@ -1,7 +1,7 @@
 ﻿using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
 
-namespace MovieService.Services
+namespace P1.MovieService.Services
 {
     public class CloudinaryService
     {

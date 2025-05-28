@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieService.DTOs;
-using MovieService.Services.IService;
+using P1.MovieService.DTOs;
+using P1.MovieService.Services.IService;
 using System.Security.Claims;
 using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 
-namespace MovieService.Controllers
+namespace P1.MovieService.Controllers
 {
     [Route("api/movies")]
     [ApiController]

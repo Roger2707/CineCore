@@ -1,7 +1,7 @@
-﻿using CinemaService.DTOs;
-using CinemaService.Models;
+﻿using P2.CinemaService.DTOs;
+using P2.CinemaService.Models;
 
-namespace CinemaService.Services.IServices
+namespace P2.CinemaService.Services.IServices
 {
     public interface ICinemaService
     {

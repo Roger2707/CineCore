@@ -1,9 +1,9 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
-using MovieService;
-using SearchService.Entities;
+using P1.MovieService;
+using P3.SearchService.Entities;
 
-namespace SearchService.Services
+namespace P3.SearchService.Services
 {
     public class GrpcMovieClientService 
     {
