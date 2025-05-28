@@ -24,7 +24,7 @@ namespace P4.BookingService.Consumers
             try
             {
                 await _bookingService.Delete(context.Message.BookingId, context.Message.Seats, context.Message.ScreeningId);
-                await _publishEndpoint.Publish(new FailedSagaEvent(context.Message.BookingId));
+                await _publishEndpoint.Publish(new FailedSagaEvent(context.Message.BookingId, context.Message.UserId));
                 await _bookingService.SaveChangeAsync();
             }
             catch (Exception ex)

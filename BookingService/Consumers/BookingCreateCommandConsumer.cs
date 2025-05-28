@@ -22,7 +22,7 @@ namespace P4.BookingService.Consumers
         {
             try
             {
-                _logger.LogInformation($"---> Consume booking create command for user {context.Message.UserId}");
+                _logger.LogInformation("---> Consume booking create command for user {UserId}", context.Message.UserId);
                 var request = new BookingCreateRequestDTO
                 {
                     BookingId = context.Message.BookingId,
@@ -44,7 +44,7 @@ namespace P4.BookingService.Consumers
             var message = context.Message.Message;
             _logger.LogError("BookingCreateCommand failed after retries for PaymentIntent {PaymentIntentId}", message.PaymentIntentId);
 
-            await _publishEndpoint.Publish(new FailedSagaEvent(message.BookingId));
+            await _publishEndpoint.Publish(new FailedSagaEvent(message.BookingId, message.UserId));
         }
     }
 }

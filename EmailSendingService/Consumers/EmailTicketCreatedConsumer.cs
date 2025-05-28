@@ -21,7 +21,7 @@ namespace P6.EmailSendingService.Consumers
         {
             _logger.LogInformation("EmailTicketCreatedConsumer: {BookingId} - {UserEmail}", context.Message.BookingId, context.Message.UserEmail);
             await _emailService.SendTicketAsync(context.Message);
-            await _publishEndpoint.Publish(new TicketDelivered(context.Message.BookingId));
+            await _publishEndpoint.Publish(new TicketDelivered(context.Message.BookingId, context.Message.UserId));
         }
     }
 }

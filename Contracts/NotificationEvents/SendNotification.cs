@@ -1,7 +1,7 @@
 ﻿namespace Contracts.NotificationEvents
 {
     public record SendNotification(
-        string UserId,
+        Guid UserId,
         NotificationType Type,
         string Message,
         object Data = null,

@@ -23,7 +23,7 @@ namespace P2.CinemaService.Consumers
             try
             {
                 await _screeingService.UpdateScreeningSeatStatus(context.Message);
-                await _publishEndpoint.Publish(new SeatUpdateCompleted(context.Message.BookingId, context.Message.ScreeningId, context.Message.Seats, context.Message.PaymentIntentId));
+                await _publishEndpoint.Publish(new SeatUpdateCompleted(context.Message.BookingId, context.Message.ScreeningId, context.Message.Seats, context.Message.PaymentIntentId, context.Message.UserId));
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace P2.CinemaService.Consumers
         {
             var message = context.Message.Message;
             _logger.LogInformation("Received UpdateSeatStatus Failed event !!!");
-            await _publishEndpoint.Publish(new SeatUpdateFailed(message.BookingId, message.ScreeningId, message.Seats, message.PaymentIntentId));
+            await _publishEndpoint.Publish(new SeatUpdateFailed(message.BookingId, message.ScreeningId, message.Seats, message.PaymentIntentId, message.UserId));
         }
     }
 }

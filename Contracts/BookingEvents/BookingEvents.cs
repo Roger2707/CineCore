@@ -18,8 +18,8 @@ namespace Contracts.BookingEvents
     #endregion
 
     #region Others support events
-    public record TicketDelivered(Guid BookingId);
-    public record EmailTicketCreated(Guid BookingId, string UserEmail);
+    public record TicketDelivered(Guid BookingId, Guid UserId);
+    public record EmailTicketCreated(Guid BookingId, string UserEmail, Guid UserId);
     public record PaymentRefund(Guid BookingId, Guid ScreeningId, List<Guid> Seats, string PaymentIntentId);
     #endregion
 }

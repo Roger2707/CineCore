@@ -1,4 +1,5 @@
 ﻿using Contracts.BookingEvents;
+using Contracts.NotificationEvents;
 using MassTransit;
 
 namespace OrchestrationSaga.StateMachine
@@ -68,7 +69,8 @@ namespace OrchestrationSaga.StateMachine
                     .Then(ctx => Console.WriteLine($"[Saga] Seats updated for: {ctx.Message.BookingId}"))
                     .Send(new Uri("queue:email-ticket-created"), ctx => new EmailTicketCreated(
                         ctx.Message.BookingId,
-                        "user@gmail.com"
+                        "user@gmail.com",
+                        ctx.Message.UserId
                     ))
                     .TransitionTo(TicketSending),
 
@@ -76,12 +78,18 @@ namespace OrchestrationSaga.StateMachine
                     .Then(ctx => Console.WriteLine($"[Saga] Seat update failed: {ctx.Message.BookingId}"))
                     .TransitionTo(Failed)
                     .Send(new Uri("queue:processing-failed-saga")
-                        , ctx => new ProcessingFailedSaga(ctx.Message.BookingId, ctx.Message.Seats, ctx.Message.ScreeningId, ctx.Message.PaymentIntentId))
+                        , ctx => new ProcessingFailedSaga(ctx.Message.BookingId, ctx.Message.Seats, ctx.Message.ScreeningId, ctx.Message.PaymentIntentId, ctx.Message.UserId))
             );
 
             During(TicketSending,
                 When(TicketDeliveredEvent)
                     .Then(ctx => Console.WriteLine($"[Saga] Ticket delivered: {ctx.Message.BookingId}"))
+                    .Send(new Uri("queue:notification-booking-service"), ctx => new SendNotification(
+                        ctx.Message.UserId,
+                        NotificationType.BookingSuccess,
+                        $"Booking successfully, bookingId: {ctx.Message.BookingId}",
+                        new { BookingId = ctx.Message.BookingId }
+                    ))
                     .TransitionTo(Completed)
                     .Finalize()
             );
@@ -90,7 +98,12 @@ namespace OrchestrationSaga.StateMachine
             DuringAny(
                 When(FailedSagaEvent)
                     .Then(ctx => Console.WriteLine($"[Saga] Event Saga failed: {ctx.Message.BookingId}"))
-                    // Will add refund later (because check out success happen earlier than booking)
+                    .Send(new Uri("queue:notification-booking-service"), ctx => new SendNotification(
+                            ctx.Message.UserId,
+                            NotificationType.BookingFailed,
+                            "Booking failed.",
+                            new { BookingId = ctx.Message.BookingId }
+                    ))
                     .TransitionTo(Failed)
             );
             //SetCompletedWhenFinalized();
