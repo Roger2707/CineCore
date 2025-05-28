@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace SharedAuth
+namespace Shared.Extensions
 {
     public static class JwtExtensions
     {

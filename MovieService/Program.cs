@@ -5,7 +5,7 @@ using MovieService.Repositories;
 using MovieService.Repositories.IRepositories;
 using MovieService.Services;
 using MovieService.Services.IService;
-using SharedAuth;
+using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

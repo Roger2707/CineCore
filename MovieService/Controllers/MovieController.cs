@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieService.DTOs;
 using MovieService.Services.IService;
 using System.Security.Claims;
+using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 
 namespace MovieService.Controllers
 {
@@ -19,10 +20,42 @@ namespace MovieService.Controllers
         }
 
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromBody] MovieParams requestParmas = null)
         {
-            var movies = await _movieService.GetAll();
-            return Ok(movies);
+            try
+            {
+                var config = new FilterConfiguration()
+                           .AddRule("Genres", ComparisonOperator.ContainsAny)
+                           .AddRule("DurationMinutes", ComparisonOperator.LessThanOrEqual);
+
+                var parameters = new DynamicQueryRequest
+                {
+                    SortFields = new List<SortField>() { new SortField { Field = "DurationMinutes" } },
+                };
+
+                if(!string.IsNullOrEmpty(requestParmas.SearchKey))
+                {
+                    parameters.SearchFields = new List<string>() { "Title", "Description" };
+                    parameters.SearchTerm = requestParmas.SearchKey;
+                }
+
+                if(requestParmas.Genres.Any())
+                {
+                    parameters.Filters.Add("Genres", requestParmas.Genres);
+                }
+
+                if (requestParmas.DurationMinutes > 0)
+                {
+                    parameters.Filters.Add("DurationMinutes", requestParmas.DurationMinutes);
+                }
+
+                var movies = await _movieService.GetAll(parameters, config);
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpGet("get-by-id")]

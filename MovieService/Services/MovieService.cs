@@ -1,10 +1,11 @@
 ﻿using Contracts;
-using Contracts.BookingEvents;
 using MassTransit;
 using MovieService.DTOs;
 using MovieService.Models;
 using MovieService.Repositories.IRepositories;
 using MovieService.Services.IService;
+using static Shared.Extensions.DynamicQueries.QueryableExtensions;
+using static Shared.Extensions.DynamicQueries.QueryablePagedExtensions;
 
 namespace MovieService.Services
 {
@@ -19,9 +20,45 @@ namespace MovieService.Services
             _cloudinaryService = cloudinaryService;
             _publishEndpoint = publishEndpoint;
         }
-        public async Task<List<MovieDTO>> GetAll(object param = null)
+        public async Task<List<MovieDTO>> GetAll()
         {
-            return await _movieRepository.GetAll(param);
+            var movies = await _movieRepository.GetAll();
+            if (movies == null || !movies.Any()) return null;
+
+            return movies.Select(movie => new MovieDTO
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                DurationMinutes = movie.DurationMinutes,
+                PosterUrl = movie.PosterUrl,
+                PublicId = movie.PublicId,
+                Genres = movie.Genres.Select(g => Enum.GetName(typeof(Genre), g)).ToList()
+            }).ToList();
+        }
+        public async Task<PagedResult<MovieDTO>> GetAll(DynamicQueryRequest request = null, FilterConfiguration config = null)
+        {
+            var moviesPageResult = await _movieRepository.GetMovies(request, config);
+            if (moviesPageResult == null || !moviesPageResult.Items.Any()) return null;
+
+            var movieDTOs = moviesPageResult.Items.Select(movie => new MovieDTO
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                DurationMinutes = movie.DurationMinutes,
+                PosterUrl = movie.PosterUrl,
+                PublicId = movie.PublicId,
+                Genres = movie.Genres.Select(g => Enum.GetName(typeof(Genre), g)).ToList()
+            }).ToList();
+
+            return new PagedResult<MovieDTO>
+            {
+                Items = movieDTOs,
+                TotalCount = moviesPageResult.TotalCount,
+                Page = moviesPageResult.Page,
+                PageSize = moviesPageResult.PageSize,
+            };
         }
 
         public async Task<Movie> FirstOrDefaultAsync(Guid id)

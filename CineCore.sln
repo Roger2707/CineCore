@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSendingService", "Emai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityService", "IdentityService\IdentityService.csproj", "{D2426F96-DF24-4351-B7D5-F909BF86C9FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedAuth", "SharedAuth\SharedAuth.csproj", "{4805479A-A3FF-44EE-B473-4CCA6D6CCB87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "SharedAuth\Shared.csproj", "{4805479A-A3FF-44EE-B473-4CCA6D6CCB87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
