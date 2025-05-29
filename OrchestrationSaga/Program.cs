@@ -1,11 +1,9 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using OrchestrationSaga;
 using OrchestrationSaga.Data;
 using OrchestrationSaga.StateMachine;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddDbContext<OrchestratorDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
