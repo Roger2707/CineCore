@@ -27,6 +27,7 @@ namespace P8.IdentityService.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim("CinemaId", user.CinemaId?.ToString() ?? ""),
                 new Claim("jti", Guid.NewGuid().ToString()),
                 new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
             };

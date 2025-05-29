@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using P1.MovieService.DTOs;
 using P1.MovieService.Services.IService;
-using System.Security.Claims;
 using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 
 namespace P1.MovieService.Controllers
@@ -12,11 +10,9 @@ namespace P1.MovieService.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public MovieController(IMovieService movieService, IHttpContextAccessor httpContextAccessor)
+        public MovieController(IMovieService movieService)
         {
             _movieService = movieService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet("get-all")]
@@ -104,24 +100,6 @@ namespace P1.MovieService.Controllers
             {
                 await _movieService.DeleteAsync(id);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        [Authorize]
-        [HttpGet("test-auth")]
-        public IActionResult GetUser()
-        {
-            try
-            {
-                var user = _httpContextAccessor.HttpContext?.User;
-                var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var email = user?.FindFirst(ClaimTypes.Email)?.Value;
-                var role = user?.FindFirst(ClaimTypes.Role)?.Value;
-                return Ok(new { userId, email, role });
             }
             catch (Exception ex)
             {

@@ -2,17 +2,19 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Services.IServices;
+using Shared.Services;
 using System.Text;
+using Microsoft.AspNetCore.Builder;
+using Shared.Middlewares;
 
 namespace Shared.Extensions
 {
-    public static class JwtExtensions
+    public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddSharedJwtAuthentication(
-        this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSharedJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("Jwt");
-
             services
                 .AddAuthentication(options =>
                 {
@@ -35,7 +37,17 @@ namespace Shared.Extensions
                     };
                 });
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             return services;
+        }
+
+        public static IApplicationBuilder UseSharedAuthentication(this IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseMiddleware<TenantAuthorizationMiddleware>();
+            return app;
         }
     }
 }

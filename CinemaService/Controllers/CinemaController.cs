@@ -25,9 +25,17 @@ namespace P2.CinemaService.Controllers
         [HttpGet("get-by-id")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var cinema = await _cinemaService.GetbyId(id);
-            if (cinema == null) return NotFound();
-            return Ok(cinema);
+            if(id == Guid.Empty) return BadRequest("Invalid cinema ID.");
+            try
+            {
+                var cinema = await _cinemaService.GetbyId(id);
+                if (cinema == null) return NotFound();
+                return Ok(cinema);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("create")]

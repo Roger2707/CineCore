@@ -49,8 +49,6 @@ builder.Services.AddMassTransit(x =>
 
 #region Services
 
-builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddScoped<CloudinaryService>();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, P1.MovieService.Services.MovieService>();
@@ -63,7 +61,7 @@ builder.Services.AddGrpc();
 
 #endregion
 
-#region Authentication
+#region Add Shared Authentication - Shared Project
 
 builder.Services.AddSharedJwtAuthentication(builder.Configuration);
 
@@ -71,8 +69,13 @@ builder.Services.AddSharedJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseAuthorization();
+#region Use Shared Authentication - Shared Project
 
+app.UseSharedAuthentication();
+
+#endregion
+
+app.UseAuthorization();
 app.MapControllers();
 app.MapGrpcService<GrpcMovieService>();
 

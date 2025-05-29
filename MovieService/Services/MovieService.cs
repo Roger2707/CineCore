@@ -4,6 +4,7 @@ using P1.MovieService.DTOs;
 using P1.MovieService.Models;
 using P1.MovieService.Repositories.IRepositories;
 using P1.MovieService.Services.IService;
+using Shared.Services.IServices;
 using static Shared.Extensions.DynamicQueries.QueryableExtensions;
 using static Shared.Extensions.DynamicQueries.QueryablePagedExtensions;
 
@@ -12,11 +13,13 @@ namespace P1.MovieService.Services
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly ICurrentUserService _currentUser;
         private readonly CloudinaryService _cloudinaryService;
         private readonly IPublishEndpoint _publishEndpoint;
-        public MovieService(IMovieRepository movieRepository, CloudinaryService cloudinaryService, IPublishEndpoint publishEndpoint)
+        public MovieService(IMovieRepository movieRepository, CloudinaryService cloudinaryService, IPublishEndpoint publishEndpoint, ICurrentUserService currentUserService)
         {
             _movieRepository = movieRepository;
+            _currentUser = currentUserService;
             _cloudinaryService = cloudinaryService;
             _publishEndpoint = publishEndpoint;
         }
@@ -63,6 +66,10 @@ namespace P1.MovieService.Services
 
         public async Task<Movie> FirstOrDefaultAsync(Guid id)
         {
+            #region Check Authorization
+
+            #endregion
+
             return await _movieRepository.FirstOrDefaultAsync(id);
         }
 

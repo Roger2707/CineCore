@@ -6,6 +6,7 @@ using P2.CinemaService.Repositories;
 using P2.CinemaService.Repositories.IRepositories;
 using P2.CinemaService.Services;
 using P2.CinemaService.Services.IServices;
+using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,10 +22,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<CinemaDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SQLServer")));
-
-#endregion
-
-#region Identity
 
 #endregion
 
@@ -74,8 +71,15 @@ builder.Services.AddGrpc();
 
 #endregion
 
+#region Add Shared Authentication - Shared Project
+builder.Services.AddSharedJwtAuthentication(builder.Configuration);
+#endregion
+
 var app = builder.Build();
 
+#region Use Shared Authentication - Shared Project
+app.UseSharedAuthentication();
+#endregion
 app.UseAuthorization();
 
 app.MapControllers();

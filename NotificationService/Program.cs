@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumersFromNamespaceContaining<SendNotificationBookingConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.ReceiveEndpoint("notification-booking-service", e =>
