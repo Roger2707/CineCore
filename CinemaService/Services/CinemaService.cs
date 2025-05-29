@@ -19,23 +19,49 @@ namespace P2.CinemaService.Services
         {
             return await _unitOfWork.Cinema.GetAll();
         }
-        public async Task<Cinema> GetbyId(Guid id)
+        public async Task<CinemaBaseDTO> GetbyId(Guid id)
         {
-            if(_currentUserService.IsCustomer) 
-                throw new UnauthorizedAccessException("You are not authorized to access this resource.");
+            var cinema = await _unitOfWork.Cinema.GetbyId(id);
+
+            if (_currentUserService.IsCustomer)
+                return new CinemaBaseDTO
+                {
+                    Id = cinema.Id,
+                    Name = cinema.Name,
+                    Address = cinema.Address,
+                };
 
             if (_currentUserService.IsAdmin)
             {
-                if (!_currentUserService.CinemaId.HasValue || _currentUserService.CinemaId != id)
-                {
+                if (!_currentUserService.CinemaId.HasValue)
                     throw new UnauthorizedAccessException("You are not authorized to access this cinema.");
+
+                else if (_currentUserService.CinemaId != id)
+                {
+                    return new CinemaBaseDTO
+                    {
+                        Id = cinema.Id,
+                        Name = cinema.Name,
+                        Address = cinema.Address,
+                    };
                 }
-            }       
-            return await _unitOfWork.Cinema.GetbyId(id);
+            }
+
+            // case : user is admin and has access to the cinema
+            return new CinemaExtraDTO
+            {
+                Id = cinema.Id,
+                Name = cinema.Name,
+                Address = cinema.Address,
+                Created = cinema.Created
+            };
         }
 
         public async Task Create(CinemaCreateDTO cinemaCreateDTO)
         {
+            if(!_currentUserService.IsSuperAdmin)
+                throw new UnauthorizedAccessException("You are not authorized to create a cinema.");
+
             var cinema = new Cinema
             {
                 Name = cinemaCreateDTO.Name,
@@ -46,6 +72,15 @@ namespace P2.CinemaService.Services
         }
         public async Task Update(Guid id, CinemaUpdateDTO cinemaUpdateDTO)
         {
+            if (_currentUserService.IsCustomer)
+                throw new UnauthorizedAccessException("You are not authorized to create a cinema.");
+
+            if (_currentUserService.IsAdmin)
+            {
+                if (!_currentUserService.CinemaId.HasValue || _currentUserService.CinemaId != id)
+                    throw new UnauthorizedAccessException("You are not authorized to access this cinema.");
+            }
+
             var cinema = await _unitOfWork.Cinema.GetbyId(id);
             if(cinema == null) throw new ArgumentNullException("Cinema is not found !");
 
@@ -56,6 +91,9 @@ namespace P2.CinemaService.Services
         }
         public async Task Delete(Guid id)
         {
+            if (!_currentUserService.IsSuperAdmin)
+                throw new UnauthorizedAccessException("You are not authorized to create a cinema.");
+
             await _unitOfWork.Cinema.Delete(id);
             await _unitOfWork.SaveChangesAsync();
         }
